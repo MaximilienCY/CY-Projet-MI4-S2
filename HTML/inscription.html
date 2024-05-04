@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Infinity Love</title>
+    <link rel="stylesheet" href="inscription.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Inscription</h1>
+        <form action="traitement_inscription.php" method="post">
+            <label for="type">Type d'utilisateur :</label>
+            <select id="type" name="type">
+                <option value="utilisateur">Utilisateur</option>
+                <option value="abonne">Abonné</option>
+            </select>
+
+            <label for="pseudo">Nouveau pseudo:</label>
+            <input type="text" id="pseudo" name="pseudo" required>
+
+            <label for="mot_de_passe">Crée votre mot de passe :</label>
+            <div class="password-container">
+                <input type="password" id="mot_de_passe" name="mot_de_passe" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility()">&#x1F441;</span>
+            </div>
+
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+
+    <script src="inscription.js"></script>
+</body>
+</html>
+

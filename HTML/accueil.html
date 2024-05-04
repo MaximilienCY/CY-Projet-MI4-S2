@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Love - Rencontre dans l'univers</title>
+    <link rel="stylesheet" href="accueil.css">
+</head>
+<body>
+    <!-- Arrière-plan avec fond étoilé -->
+    <div class="background">
+        <div class="content">
+            <!-- Titre et sous-titre -->
+            <h1>Infinity Love</h1>
+            <h2>Rencontre dans l'univers</h2>
+            <!-- Phrase d'accroche -->
+            <p>Explorez de nouveaux horizons avec Infinity Love. Découvrez l'amour au-delà des frontières.</p>
+            <!-- Boutons d'inscription et de connexion -->
+            <div class="buttons">
+                <button onclick="window.location.href='inscription.html'">Inscription</button>
+                <button onclick="showModal('connexion')">Connexion</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fenêtre modale pour choisir entre abonné et utilisateur lors de la connexion -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Êtes-vous un abonné ou un utilisateur ?</h3>
+            <button onclick="window.location.href='inscription.html'">Abonné</button>
+            <button onclick="window.location.href='connexion.html'">Utilisateur</button>
+        </div>
+    </div>
+
+    <!-- JavaScript pour afficher et masquer la fenêtre modale -->
+    <script>
+        function showModal(type) {
+            var modal = document.getElementById("modal");
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("modal");
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>

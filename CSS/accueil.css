@@ -8,7 +8,7 @@ body {
 
 /* Style de l'arrière-plan avec fond étoilé */
 .background {
-    background-image: url('https://cdn.shopify.com/s/files/1/0077/5192/5837/files/galaxie-andromede_1024x1024.jpg?v=1604600507'); /* Remplacer par l'image d'arrière-plan */
+    background-image: url('/home/celiane/projet-info/photo.jpeg'); /* Remplacer par l'image d'arrière-plan */
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -24,8 +24,6 @@ body {
 
 /* Style des éléments de texte */
 h1 {
-   
-
     font-size: 4em;
     margin: 0;
     padding-top: 20vh;
@@ -33,10 +31,6 @@ h1 {
     /* Effet 3D */
     text-shadow: 2px 2px 5px #888; /* Ombre pour l'effet de profondeur */
     color: #fff; /* Couleur du texte */
-
-
-}
-
 }
 
 h2 {
@@ -107,3 +101,5 @@ button:hover {
 .close:hover {
     color: #bbb;
 }
+
+/* Ajout de styles pour les nouvelles fonctionnalités */

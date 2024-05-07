@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="accueil.css">
 </head>
 <body>
+    <!-- Boutons d'inscription et de connexion en haut à gauche -->
+    <div class="top-left">
+        <button onclick="window.location.href='inscription.html'">Inscription</button>
+        <button onclick="showModal('connexion')">Connexion</button>
+    </div>
+
     <!-- Arrière-plan avec fond étoilé -->
     <div class="background">
         <div class="content">
@@ -15,11 +21,22 @@
             <h2>Rencontre dans l'univers</h2>
             <!-- Phrase d'accroche -->
             <p>Explorez de nouveaux horizons avec Infinity Love. Découvrez l'amour au-delà des frontières.</p>
-            <!-- Boutons d'inscription et de connexion -->
-            <div class="buttons">
-                <button onclick="window.location.href='inscription.html'">Inscription</button>
-                <button onclick="showModal('connexion')">Connexion</button>
-            </div>
+            <!-- Section de présentation des fonctionnalités -->
+            <section class="features">
+                <h3>Pourquoi choisir Infinity Love ?</h3>
+                <div class="feature">
+                    <h4>Rencontres variées</h4>
+                    <p>Découvrez des personnes aux intérêts similaires ou complémentaires.</p>
+                </div>
+                <div class="feature">
+                    <h4>Confidentialité garantie</h4>
+                    <p>Nous respectons la confidentialité de vos informations personnelles.</p>
+                </div>
+                <div class="feature">
+                    <h4>Compatibilité amoureuse</h4>
+                    <p>Notre algorithme avancé vous aide à trouver des correspondances idéales.</p>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -30,6 +47,26 @@
             <h3>Êtes-vous un abonné ou un utilisateur ?</h3>
             <button onclick="window.location.href='inscription.html'">Abonné</button>
             <button onclick="window.location.href='connexion.html'">Utilisateur</button>
+        </div>
+    </div>
+
+    <!-- Cases pour parler des abonnements en bas à gauche -->
+    <div class="bottom-left">
+        <div class="subscription-box">
+            <h4>Abonnement Standard</h4>
+            <p>Accès limité à certaines fonctionnalités</p>
+        </div>
+        <div class="subscription-box">
+            <h4>Abonnement Premium</h4>
+            <p>Accès complet à toutes les fonctionnalités</p>
+        </div>
+        <div class="subscription-box">
+            <h4>Abonnement Gold</h4>
+            <p>Accès VIP avec avantages exclusifs</p>
+        </div>
+        <div class="subscription-box">
+            <h4>Abonnement VIP</h4>
+            <p>Accès ultra-premium avec privilèges spéciaux</p>
         </div>
     </div>
 

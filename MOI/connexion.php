@@ -47,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $data = explode(",", $line);
 
         // Assuming $data[1] contains the email and $data[2] contains the password
-        if ($data[1] == $email && trim($data[2]) == $password) {
+        if ($data[3] == $email && trim($data[4]) == $password) {
             $found = true;
-            $user_type = trim($data[3]); // Assuming $data[3] contains the user type
+            $user_type = trim($data[13]); // Assuming $data[3] contains the user type
             break;
         }
     }
@@ -63,4 +63,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-

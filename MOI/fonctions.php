@@ -41,3 +41,109 @@ function getRecentProfiles($filePath) {
     return $recentProfiles;
 }
 ?>
+
+<?php
+
+function getConnectedUserData() {
+    // Initialiser les données de l'utilisateur connecté
+    $userData = array();
+
+    // Démarrer la session
+    session_start();
+
+    // Vérifier si l'utilisateur est connecté
+    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+        // Ouvrir le fichier utilisateurs.txt en mode lecture
+        $file = fopen("utilisateurs.txt", "r");
+
+        // Parcourir le fichier ligne par ligne
+        while (!feof($file)) {
+            $line = fgets($file);
+            $data = explode(",", $line);
+
+            // Vérifier si l'identifiant de l'utilisateur connecté correspond à l'identifiant dans le fichier
+            if ($_SESSION['user_id'] == $data[0]) {
+                // Ajouter les données de l'utilisateur à userData
+                $userData['user_id'] = $data[0];
+                $userData['first_name'] = $data[1];
+                $userData['name'] = $data[2];
+                $userData['email'] = $data[3];
+                $userData['gender'] = $data[5];
+                $userData['birthdate'] = $data[6];
+                $userData['profession'] = $data[7];
+                $userData['residence'] = $data[8];
+                $userData['relationship_status'] = $data[9];
+                $userData['physical_description'] = $data[10];
+                $userData['personal_info'] = $data[11];
+                $userData['photo'] = $data[12];
+                $userData['user_type'] = $data[13];
+
+                // Sortir de la boucle une fois que les données sont trouvées
+                break;
+            }
+        }
+
+        // Fermer le fichier
+        fclose($file);
+    }
+
+    // Retourner les données de l'utilisateur
+    return $userData;
+}
+?>
+
+<?php
+
+function updateUserData($postData) {
+    session_start();
+
+    // Vérifier si l'utilisateur est connecté
+    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+        // Ouvrir le fichier utilisateurs.txt en mode lecture et écriture
+        $file = fopen("utilisateurs.txt", "r+");
+
+        // Lire toutes les lignes du fichier
+        $lines = [];
+        while (!feof($file)) {
+            $lines[] = fgets($file);
+        }
+
+        // Replacer le pointeur de fichier au début
+        rewind($file);
+
+        // Parcourir les lignes pour trouver et mettre à jour l'utilisateur actuel
+        foreach ($lines as &$line) {
+            $data = explode(",", $line);
+            if ($_SESSION['user_id'] == $data[0]) {
+                // Mettre à jour les données de l'utilisateur avec les valeurs soumises dans le formulaire
+                $data[1] = $postData['first_name'];
+                $data[2] = $postData['last_name'];
+                $data[3] = $postData['email'];
+                $data[5] = $postData['gender'];
+                $data[6] = $postData['birthdate'];
+                $data[7] = $postData['profession'];
+                $data[8] = $postData['residence'];
+                $data[9] = $postData['relationship_status'];
+                $data[10] = $postData['physical_description'];
+                $data[11] = $postData['personal_info'];
+                $data[12] = $postData['photo'];
+
+                // Reconstruire la ligne mise à jour
+                $line = implode(",", $data);
+                break;
+            }
+        }
+
+        // Réécrire toutes les lignes dans le fichier
+        foreach ($lines as $line) {
+            fwrite($file, $line);
+        }
+
+        // Fermer le fichier
+        fclose($file);
+    }
+}
+
+
+?>
+

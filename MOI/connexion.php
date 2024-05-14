@@ -1,3 +1,39 @@
+<?php
+session_start();
+
+// Vérifie si le formulaire de connexion a été soumis
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Récupération des données saisies dans le formulaire
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Lecture du fichier utilisateurs.txt
+    $file = fopen("utilisateurs.txt", "r");
+
+    // Boucle pour rechercher l'utilisateur dans le fichier
+    while (!feof($file)) {
+        $line = fgets($file);
+        $data = explode(",", $line);
+
+        // Vérification des identifiants
+        if ($data[3] == $email && trim($data[4]) == $password) {
+            // Si les identifiants sont valides, définir les informations de session
+            $_SESSION['user_id'] = $data[0]; // ID de l'utilisateur
+            $_SESSION['user_type'] = trim($data[13]); // Type d'utilisateur
+            fclose($file);
+
+            // Redirection vers la page d'accueil après la connexion
+            header("Location: index.php");
+            exit();
+        }
+    }
+
+    // Si les identifiants ne correspondent à aucun utilisateur, afficher un message d'erreur
+    echo "<div class='message'>Nom d'utilisateur ou mot de passe incorrect.</div>";
+    fclose($file);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,10 +46,10 @@
     <div class="container">
         <div class="box form-box">
             <header>Login</header>
-            <form action="" method="post"> <!-- Utilisation de la même action pour les deux formulaires -->
+            <form action="" method="post">
                 <div class="field input">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" autocomplete="off" required> <!-- Correction du type d'entrée à email -->
+                    <input type="email" name="email" id="email" autocomplete="off" required>
                 </div>
 
                 <div class="field input">
@@ -22,7 +58,7 @@
                 </div>
 
                 <div class="field">
-                    <input type="submit" class="btn" name="submit" value="Login"> <!-- Suppression de l'attribut required ici -->
+                    <input type="submit" class="btn" name="submit" value="Login">
                 </div>
                 <div class="links">
                     Pas encore inscrit(e) ? <a href="inscription.php">S'inscrire ici</a>
@@ -32,34 +68,3 @@
     </div>
 </body>
 </html>
-
-<?php
-session_start();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $file = fopen("utilisateurs.txt", "r");
-    $found = false;
-
-    while (!feof($file)) {
-        $line = fgets($file);
-        $data = explode(",", $line);
-
-        // Assuming $data[1] contains the email and $data[2] contains the password
-        if ($data[3] == $email && trim($data[4]) == $password) {
-            $found = true;
-            $user_type = trim($data[13]); // Assuming $data[3] contains the user type
-            break;
-        }
-    }
-    fclose($file);
-
-    if ($found) {
-        $_SESSION['user_type'] = $user_type;
-        header("Location: index.php");
-    } else {
-        echo "<div class='message'>Nom d'utilisateur ou mot de passe incorrect.</div>";
-    }
-}
-?>

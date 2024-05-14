@@ -1,39 +1,37 @@
-<?php
-include('functions.php');
-session_start();
-
-if (isset($_POST['submit'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    
-    if (checkLogin($username, $password)) {
-        $_SESSION['username'] = $username;
-        header("Location: accueil.php");
-        exit();
-    } else {
-        $error = "Nom d'utilisateur ou mot de passe incorrect.";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
     <title>Connexion</title>
 </head>
 <body>
-    <h2>Connexion</h2>
-    <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
-    <form action="connexion.php" method="POST">
-        <label for="username">Pseudo :</label>
-        <input type="text" id="username" name="username" required><br><br>
+    <div class="container">
+    <div class="box form-box">
+    <header>Login</header>
+            <form action="" method="post">
+                <div class="field input">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" autocomplete="off" required>
+                </div>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="password" name="password" required><br><br>
+                <div class="field input">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" autocomplete="off" required>
+                </div>
 
-        <input type="submit" name="submit" value="Se connecter">
-    </form>
+                <div class="field">
+                    
+                    <input type="submit" class="btn" name="submit" value="Login" required>
+                </div>
+                <div class="links">
+                    Pas encore inscrit(e) ? <a href="inscription.php">S'inscrire ici</a>
+                </div>
+            </form>
+            </div>
+            </div>
 </body>
 </html>
+
 

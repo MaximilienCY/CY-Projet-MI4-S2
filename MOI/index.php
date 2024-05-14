@@ -51,6 +51,7 @@ $droits_utilisateur = $droits[$user_type];
                     // Vérifiez si l'utilisateur est connecté
                     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
                         echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
+                        echo '<li><a href="mon_profil.php">Mon profil</a></li>';
                     } else {
                         echo '<li><a href="inscription.php">Inscription</a></li>';
                         echo '<li><a href="connexion.php">Connexion</a></li>';

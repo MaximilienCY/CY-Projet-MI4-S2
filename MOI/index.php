@@ -11,7 +11,7 @@ $user_type = $_SESSION['user_type'];
 // Définir les droits pour chaque type d'utilisateur
 $droits = [
     'visiteur' => ['voir_profil_public'],
-    'utilisateur' => ['voir_profil_public', 'voir_profil_prive'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs'],
     'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
     'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
 ];
@@ -38,14 +38,53 @@ $droits_utilisateur = $droits[$user_type];
                     <li><a href="#hero">Accueil</a></li> 
                     <li><a href="#features">Offres</a></li>
                     <li><a href="#search">Recherche</a></li>
-                    <li><a href="connexion.php">Connexion</a></li>
-                    <li><a href="inscription.php">Inscription</a></li>
+                    <?php
+			session_start();
+
+			// Déterminez si l'utilisateur est connecté et récupérez son type d'utilisateur
+			$user_type = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'visiteur';
+			// Vérifiez si l'utilisateur est connecté en tant qu'utilisateur, abonné ou administrateur
+			$is_connected = in_array($user_type, ['utilisateur', 'abonne', 'administrateur']);
+
+			// Si l'utilisateur est connecté, affichez un bouton de déconnexion
+			if ($is_connected) {
+    			
+			} else {
+    			// Si l'utilisateur est un visiteur, affichez les liens d'inscription et de connexion
+    			echo '<li><a href="inscription.php">Inscription</a></li>';
+    			echo '<li><a href="connexion.php">Connexion</a></li>';
+			}
+			?>
+
                     <?php if (in_array('envoyer_messages', $droits_utilisateur)) : ?>
                         <li><a href="messages.php">Messages</a></li>
                     <?php endif; ?>
                     <?php if (in_array('gerer_utilisateurs', $droits_utilisateur)) : ?>
                         <li><a href="admin.php">Administration</a></li>
                     <?php endif; ?>
+                    <?php
+			session_start();
+
+			// Vérifiez si l'utilisateur est connecté
+			if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+    			// Si oui, affichez un bouton de déconnexion
+    			echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
+			}
+				
+			// Si l'action de déconnexion est demandée
+			if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+    			// Détruisez toutes les variables de session
+    			$_SESSION = array();
+
+    			// Détruisez la session
+    			session_destroy();
+
+    			// Redirigez l'utilisateur vers la page d'accueil après la déconnexion
+    			header("Location: index.php");
+    			exit;
+			}
+			?>
+
                 </ul>
             </nav>
         </div>
@@ -63,12 +102,12 @@ $droits_utilisateur = $droits[$user_type];
                     $users = [];
                     if ($file) {
                         while (($line = fgets($file)) !== false) {
-                            list($id, $nom, $prenom, $photo) = explode(",", trim($line));
+                            list($id, $nom, $prenom, $photo_address) = explode(",", trim($line));
                             $users[] = [
                                 'id' => $id,
                                 'nom' => $nom,
                                 'prenom' => $prenom,
-                                'photo' => $photo
+                                'photo' => $photo_address
                             ];
                         }
                         fclose($file);
@@ -155,4 +194,3 @@ $droits_utilisateur = $droits[$user_type];
     
 </body>
 </html>
-

@@ -2,6 +2,7 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Génération de l'identifiant utilisateur unique
     $user_id = "user_" . uniqid();
+    $user_type = "utilisateur";
 
     $first_name = $_POST['first_name'];
     $name = $_POST['name'];
@@ -22,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $photo_address = $target_file;
 
     // Formatage des données pour le stockage dans le fichier
-    $data = $user_id . "," . $first_name . "," . $name . "," . $mail . "," . $password . "," . $gender . "," . $birthdate . "," . $profession . "," . $residence . "," . $relationship_status . "," . $physical_description . "," . $personal_info . "," . $photo_address . "\n";
+    $data = $user_id . "," . $first_name . "," . $name . "," . $mail . "," . $password . "," . $gender . "," . $birthdate . "," . $profession . "," . $residence . "," . $relationship_status . "," . $physical_description . "," . $personal_info . "," . $photo_address . "," . $user_type ."\n";
 
     // Ouverture du fichier en mode append
     $file = fopen("utilisateurs.txt", "a");
@@ -117,4 +118,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
-

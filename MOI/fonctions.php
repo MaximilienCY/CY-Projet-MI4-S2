@@ -99,17 +99,8 @@ function updateUserData($postData) {
 
     // Vérifier si l'utilisateur est connecté
     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
-        // Ouvrir le fichier utilisateurs.txt en mode lecture et écriture
-        $file = fopen("utilisateurs.txt", "r+");
-
-        // Lire toutes les lignes du fichier
-        $lines = [];
-        while (!feof($file)) {
-            $lines[] = fgets($file);
-        }
-
-        // Replacer le pointeur de fichier au début
-        rewind($file);
+        // Lire toutes les lignes du fichier dans un tableau
+        $lines = file("utilisateurs.txt");
 
         // Parcourir les lignes pour trouver et mettre à jour l'utilisateur actuel
         foreach ($lines as &$line) {
@@ -117,7 +108,7 @@ function updateUserData($postData) {
             if ($_SESSION['user_id'] == $data[0]) {
                 // Mettre à jour les données de l'utilisateur avec les valeurs soumises dans le formulaire
                 $data[1] = $postData['first_name'];
-                $data[2] = $postData['last_name'];
+                $data[2] = $postData['name'];
                 $data[3] = $postData['email'];
                 $data[5] = $postData['gender'];
                 $data[6] = $postData['birthdate'];
@@ -135,14 +126,7 @@ function updateUserData($postData) {
         }
 
         // Réécrire toutes les lignes dans le fichier
-        foreach ($lines as $line) {
-            fwrite($file, $line);
-        }
-
-        // Fermer le fichier
-        fclose($file);
+        file_put_contents("utilisateurs.txt", implode("", $lines));
     }
 }
-
-
 ?>

@@ -46,7 +46,7 @@ $droits_utilisateur = $droits[$user_type];
                 <ul>
                     <li><a href="#hero">Accueil</a></li> 
                     <li><a href="#features">Offres</a></li>
-                    <li><a href="#search">Recherche</a></li>
+                    <li><a href="recherche.php">Recherche</a></li> <!-- Lien transformé en bouton -->
                     <?php
                     // Vérifiez si l'utilisateur est connecté
                     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
@@ -152,7 +152,7 @@ $droits_utilisateur = $droits[$user_type];
                 <a href="inscription.php" class="cta-button">Inscrivez-vous maintenant</a>
             </div>
         </section>
-        <?php endif; ?>
+       
 
         <section id="features" class="features">
             <div class="container">
@@ -160,46 +160,30 @@ $droits_utilisateur = $droits[$user_type];
                 <div class="features-grid">
                     <div class="offer-card">
                         <div class="offer-img-wrapper">
-                            <img src="images/offer1.jpg" alt="Offre 1" class="offer-img">
+                            <img src="offres/classic_subscription.jpg" alt="Abonnement Classique" class="offer-img">
                         </div>
                         <div class="offer-content">
-                            <h3 class="offer-title">Offre 1</h3>
-                            <p class="offer-description">Description de l'offre 1.</p>
-                            <p class="offer-price">À partir de <b>1 219 €</b></p>
+                            <h3 class="offer-title">Abonnement Classique</h3>
+                            <p class="offer-description">Profitez des fonctionnalités essentielles pour rencontrer des gens et commencer votre aventure amoureuse.</p>
+                            <p class="offer-price">À partir de <b>9,99 € / mois</b></p>
+                            <a href="abonnement_classique.php" class="offer-link">En savoir plus</a>
                         </div>
                     </div>
                     <div class="offer-card">
                         <div class="offer-img-wrapper">
-                            <img src="images/offer2.jpg" alt="Offre 2" class="offer-img">
+                            <img src="offres/premium_subscription.jpg" alt="Abonnement Premium" class="offer-img">
                         </div>
                         <div class="offer-content">
-                            <h3 class="offer-title">Offre 2</h3>
-                            <p class="offer-description">Description de l'offre 2.</p>
-                            <p class="offer-price">À partir de <b>719 €</b></p>
-                        </div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-img-wrapper">
-                            <img src="images/offer3.jpg" alt="Offre 3" class="offer-img">
-                        </div>
-                        <div class="offer-content">
-                            <h3 class="offer-title">Offre 3</h3>
-                            <p class="offer-description">Description de l'offre 3.</p>
-                            <p class="offer-price">À partir de <b>1 229 €</b></p>
+                            <h3 class="offer-title">Abonnement Premium</h3>
+                            <p class="offer-description">Accédez à toutes les fonctionnalités premium pour maximiser vos chances de trouver l'amour.</p>
+                            <p class="offer-price">À partir de <b>19,99 € / mois</b></p>
+                            <a href="abonnement_premium.php" class="offer-link">En savoir plus</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <section id="search" class="search">
-            <div class="container">
-                <h2>Recherche</h2>
-                <form action="recherche.php" method="get">
-                    <input type="text" name="query" placeholder="Recherchez des profils...">
-                    <button type="submit">Rechercher</button>
-                </form>
-            </div>
-        </section>
+        <?php endif; ?>
     </main>
     
     <footer>

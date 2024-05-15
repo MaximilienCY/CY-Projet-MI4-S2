@@ -65,17 +65,21 @@ function getProfileById($filePath, $id) {
         <div class="container">
             <?php if ($profile): ?>
                 <div class="profile-card">
-                    <img src="<?php echo htmlspecialchars($profile['photo']); ?>" alt="Photo de <?php echo htmlspecialchars($profile['prenom']); ?>">
-                    <h2><?php echo htmlspecialchars($profile['prenom']) . " " . htmlspecialchars($profile['nom']); ?></h2>
-                    <p>Email: <?php echo htmlspecialchars($profile['email']); ?></p>
-                    <p>Sexe: <?php echo htmlspecialchars($profile['sexe']); ?></p>
-                    <p>Date d'inscription: <?php echo htmlspecialchars($profile['date_creation']); ?></p>
-                    <p>Profession: <?php echo htmlspecialchars($profile['profession']); ?></p>
-                    <p>Ville: <?php echo htmlspecialchars($profile['ville']); ?></p>
-                    <p>Statut: <?php echo htmlspecialchars($profile['statut']); ?></p>
-                    <p>Yeux: <?php echo htmlspecialchars($profile['yeux']); ?></p>
-                    <p>Taille: <?php echo htmlspecialchars($profile['taille']); ?></p>
-                    <p>Type d'utilisateur: <?php echo htmlspecialchars($profile['type_utilisateur']); ?></p>
+                    <figure class="profile-card-image-container">
+                        <img src="<?php echo htmlspecialchars($profile['photo']); ?>" alt="Photo de <?php echo htmlspecialchars($profile['prenom']); ?>" class="profile-card-image">
+                    </figure>
+                    <div class="profile-card-content">
+                        <h2><?php echo htmlspecialchars($profile['prenom']) . " " . htmlspecialchars($profile['nom']); ?></h2>
+                        <p>Email: <?php echo htmlspecialchars($profile['email']); ?></p>
+                        <p>Sexe: <?php echo htmlspecialchars($profile['sexe']); ?></p>
+                        <p>Date d'inscription: <?php echo htmlspecialchars($profile['date_creation']); ?></p>
+                        <p>Profession: <?php echo htmlspecialchars($profile['profession']); ?></p>
+                        <p>Ville: <?php echo htmlspecialchars($profile['ville']); ?></p>
+                        <p>Statut: <?php echo htmlspecialchars($profile['statut']); ?></p>
+                        <p>Yeux: <?php echo htmlspecialchars($profile['yeux']); ?></p>
+                        <p>Taille: <?php echo htmlspecialchars($profile['taille']); ?></p>
+                        <p>Type d'utilisateur: <?php echo htmlspecialchars($profile['type_utilisateur']); ?></p>
+                    </div>
                 </div>
             <?php else: ?>
                 <p>Profil non trouvé.</p>
@@ -90,4 +94,3 @@ function getProfileById($filePath, $id) {
     </footer>
 </body>
 </html>
-

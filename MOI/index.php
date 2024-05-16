@@ -26,25 +26,16 @@ $droits_utilisateur = $droits[$user_type];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinity'love - RencontreSite</title>
     <link rel="stylesheet" href="accueil.css">
-    <style>
-        /* Styles pour masquer les indications visuelles des liens */
-        .feature-card-link {
-            text-decoration: none;
-            color: inherit;
-        }
-        .feature-card-link:hover .feature-card-image {
-            opacity: 0.8; /* Optionnel : un léger changement visuel au survol */
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
 </head>
 <body>
-
     <header>
-        <div class="container">
-            <h1>Infinity'love</h1>
-            <nav>
-                <ul>
-                    <li><a href="#hero">Accueil</a></li> 
+        
+    	<nav class="navbar">
+  	        <a href="#" class="logo">Infinity Love<span>.<span></a>
+                <ul class="menu-links">
+                    <li><a href="#hero-section">Accueil</a></li> 
                     <li><a href="#features">Offres</a></li>
                     <li><a href="recherche.php">Recherche</a></li> <!-- Lien transformé en bouton -->
                     <?php
@@ -53,8 +44,8 @@ $droits_utilisateur = $droits[$user_type];
                         echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                         echo '<li><a href="mon_profil.php">Mon profil</a></li>';
                     } else {
-                        echo '<li><a href="inscription.php">Inscription</a></li>';
-                        echo '<li><a href="connexion.php">Connexion</a></li>';
+                        echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
+                        echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
                     }
 
                     if (in_array('envoyer_messages', $droits_utilisateur)) {
@@ -79,7 +70,6 @@ $droits_utilisateur = $droits[$user_type];
                     ?>
                 </ul>
             </nav>
-        </div>
     </header>
     
     <main>
@@ -145,51 +135,95 @@ $droits_utilisateur = $droits[$user_type];
         <?php endif; ?>
 
         <?php if ($user_type === 'visiteur') : ?>
-        <section id="hero" class="hero">
-            <div class="container">
+        <section class="hero-section" id="hero-section">
+            <div class="content">
                 <h2>Trouvez l'amour de votre vie</h2>
                 <p>Rejoignez notre communauté dès maintenant et commencez votre voyage vers une relation significative.</p>
-                <a href="inscription.php" class="cta-button">Inscrivez-vous maintenant</a>
+                <button onclick="window.location.href='inscription.php'">Je m'inscris</button>
             </div>
         </section>
-       
 
-        <section id="features" class="features">
-            <div class="container">
-                <h2>Nos Offres</h2>
-                <div class="features-grid">
-                    <div class="offer-card">
-                        <div class="offer-img-wrapper">
-                            <img src="offres/classic_subscription.jpg" alt="Abonnement Classique" class="offer-img">
-                        </div>
-                        <div class="offer-content">
-                            <h3 class="offer-title">Abonnement Classique</h3>
-                            <p class="offer-description">Profitez des fonctionnalités essentielles pour rencontrer des gens et commencer votre aventure amoureuse.</p>
-                            <p class="offer-price">À partir de <b>9,99 € / mois</b></p>
-                            <a href="abonnement_classique.php" class="offer-link">En savoir plus</a>
-                        </div>
-                    </div>
-                    <div class="offer-card">
-                        <div class="offer-img-wrapper">
-                            <img src="offres/premium_subscription.jpg" alt="Abonnement Premium" class="offer-img">
-                        </div>
-                        <div class="offer-content">
-                            <h3 class="offer-title">Abonnement Premium</h3>
-                            <p class="offer-description">Accédez à toutes les fonctionnalités premium pour maximiser vos chances de trouver l'amour.</p>
-                            <p class="offer-price">À partir de <b>19,99 € / mois</b></p>
-                            <a href="abonnement_premium.php" class="offer-link">En savoir plus</a>
-                        </div>
-                    </div>
+<section class="features" id="features">
+<div class=pricing_table>
+    <div class=details>
+        <h1>Nos offres</h1>
+        <p>Découvrez sans plus attendre nos offres d'abonnement !</p>
+    </div>
+    <div class="grid">
+        <div class="box basic">
+            <div class="title">Classique</div>
+                <div class="price">
+                    <b>9.99$</b>
+                    <span>par mois</span>
                 </div>
-            </div>
-        </section>
+                <div class="features">
+                    <div>info 1</div>
+                    <div>Info 2</div>
+                    <div>Info 3</div>
+                    <div>Info 4</div>
+                </div>
+                <div class="button">
+                    <button>Découvrir</button>
+                </div>
+        </div>
+        <div class="box pro">
+            <div class="title">Premium</div>
+                <div class="price">
+                    <b>$14.99</b>
+                    <span>par mois</span>
+                </div>
+                <div class="features">
+                    <div>info 1</div>
+                    <div>Info 2</div>
+                    <div>Info 3</div>
+                    <div>Info 4</div>
+                </div>
+                <div class="button">
+                    <button>Découvrir</button>
+                </div>
+        
+        </div>
+    </div>
+</div>
+</section>
+
+        
         <?php endif; ?>
+
     </main>
     
+    <script>
+      const header = document.querySelector("header");
+      const hamburgerBtn = document.querySelector("#hamburger-btn");
+      const closeMenuBtn = document.querySelector("#close-menu-btn");
+      // Toggle mobile menu on hamburger button click
+      hamburgerBtn.addEventListener("click", () => header.classList.toggle("show-mobile-menu"));
+      // Close mobile menu on close button click
+      closeMenuBtn.addEventListener("click", () => hamburgerBtn.click());
+    </script>
+
     <footer>
-        <div class="container">
-            <p>&copy; 2024 Infinity'love - Tous droits réservés</p>
+    <div class="footerContainer">
+        <div class="socialIcons">
+            <a href=""><i class="fa-brands fa-facebook"></i></a>
+            <a href=""><i class="fa-brands fa-instagram"></i></a>
+            <a href=""><i class="fa-brands fa-twitter"></i></a>
+            <a href=""><i class="fa-brands fa-google-plus"></i></a>
+            <a href=""><i class="fa-brands fa-youtube"></i></a>
         </div>
-    </footer>
+        <div class="footerNav">
+            <ul><li><a href="#hero-section">Accueuil</a></li>
+                <li><a href="">A propos</a></li>
+                <li><a href="">Nous contacter</a></li>
+                <li><a href="">Notre équipe</a></li>
+                <li><a href="">Foire aux questions</a></li>
+            </ul>
+        </div>
+        
+    </div>
+    <div class="footerBottom">
+    <p>&copy; 2024 Infinity'love - Tous droits réservés</p>
+    </div>
+</footer>
 </body>
 </html>

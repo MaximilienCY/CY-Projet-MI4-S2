@@ -1,70 +1,376 @@
-/* Reset some default styles */
-body, h1, h2, h3, p, ul {
-    margin: 0;
-    padding: 0;
-}
+/* Importing Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-body {
-    font-family: Arial, sans-serif;
-    color: #333;
-    line-height: 1.6;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 header {
-    background: #f8f8f8;
-    padding: 20px 0;
-    border-bottom: 1px solid #e1e1e1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
 }
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
+header .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-h1 {
-    text-align: center;
-    font-size: 2.5em;
-    margin-bottom: 10px;
+.navbar .logo {
+  color: #fff;
+  font-weight: 600;
+  font-size: 2.1rem;
+  text-decoration: none;
 }
 
-nav ul {
-    list-style: none;
-    text-align: center;
+.navbar .logo span {
+  color: #C06B3E;
 }
 
-nav ul li {
-    display: inline;
-    margin: 0 10px;
+.navbar .menu-links {
+  display: flex;
+  list-style: none;
+  gap: 35px;
+}
+.navbar button{
+background: #fff;
+  padding: 4px 12px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
 }
 
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-}
-
-.hero {
-    background: #e1e1e1;
-    padding: 60px 0;
-    text-align: center;
-}
-
-.hero h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-}
-
-.cta-button {
-    background: #007bff;
+.navbar button:hover {
     color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
+    background: #C06B3E;
+  }
+
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #C06B3E;
+}
+
+
+
+.hero-section {
+  height: 100vh;
+  background-image: url("uploads/steelwool-458842_1920.jpg");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.hero-section .content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  color: #fff;
+}
+
+.hero-section .content h2 {
+  font-size: 3rem;
+  max-width: 600px;
+  line-height: 70px;
+}
+
+.hero-section .content p {
+  font-weight: 300;
+  max-width: 600px;
+  margin-top: 15px;
+}
+
+.hero-section .content button {
+  background: #fff;
+  padding: 12px 30px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 6px;
+  margin-top: 38px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.hero-section .content button:hover {
+  color: #fff;
+  background: #C06B3E;
+}
+
+#close-menu-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  display: none;
+}
+
+#hamburger-btn {
+  color: #fff;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 10px;
+  }
+
+  header.show-mobile-menu::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+  }
+
+  .navbar .logo {
+    font-size: 1.7rem;
+  }
+
+    
+  #hamburger-btn, #close-menu-btn {
+    display: block;
+  }
+
+  .navbar .menu-links {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background: #fff;
+    flex-direction: column;
+    padding: 70px 40px 0;
+    transition: left 0.2s ease;
+  }
+
+  header.show-mobile-menu .navbar .menu-links {
+    left: 0;
+  }
+
+  .navbar a {
+    color: #000;
+  }
+
+  .hero-section .content {
+    text-align: center;
+  }
+
+  .hero-section .content :is(h2, p) {
+    max-width: 100%;
+  }
+
+  .hero-section .content h2 {
+    font-size: 2.3rem;
+    line-height: 60px;
+  }
+  
+  .hero-section .content button {
+    padding: 9px 18px;
+  }
+}
+
+.pricing_table{
+    padding: 40px 0px;
+    background-color: #f7f0f0;
+}
+
+.pricing_table .details{
+    width :90%;
+    max-width: 500px;
+    text-align: center;
+    margin : 0 auto;
+    padding: 40px 20px;
+}
+
+.pricing_table .grid{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 0px;
+    padding : 20px;
+}
+
+.pricing_table .grid .box{
+    width: 250px;
+    border: 1px solid #eee;
+    text-align: center;
+    padding: 20px;
+    background:#fff;
+    border-radius : 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pricing_table .grid .box .price{
+    margin-bottom: 20px;
+}
+
+.pricing_table .grid .box .price b{
+    display: block;
+    font-size: 40px;
+    margin-bottom: -5px;
+}
+
+.pricing_table .grid .box .features > *{
+    color :#474645;
+    padding: 8px 0px;
+    border-bottom : 1px solid rgba(0,0,0,0.2);
+}
+
+.pricing_table .grid .box .button button{
+    width: 100%;
+    margin: 25px 0px 0px;
+    padding : 10px;
+    background: #C06B3E;
+    color:#000000;
     border-radius: 5px;
+    outline: none;
+    border: none;
+    font-weight: 600;
+    cursor:pointer;
+}
+
+.pricing_table .grid .box.pro {
+    transform:scale(1.1);
+    background-color: #C06B3E;
+}
+
+.pricing_table .grid .box.pro .title{
+    color: #fff;
+}
+
+.pricing_table .grid .box.pro .price{
+    color: #fff;
+}
+
+.pricing_table .grid .box.pro .features > * {
+    color: #fff;
+    border-bottom:1px solid rgba(red, green, blue, 0.5) ;
+}
+
+.pricing_table .grid .box.pro .button button{
+    background: #fff;
+    color: #C06B3E;
+}
+
+.pricing_table .grid .box.basic .button button{
+    background: #C06B3E;
+    color: #fff;
+}
+
+.pricing_table .grid .box.basic .button button:hover{
+    background: #fff;
+    color: #000000;
+    transition: 0.4s ease;
+}
+
+.pricing_table .grid .box.box.pro .button button:hover{
+    background: #C06B3E;
+    color: #fff;
+    transition: 0.4s ease;
+}
+
+footer{
+    background-color: #111;
+}
+.footerContainer{
+    width: 100%;
+    padding: 40px 26px 17px ;
+}
+.socialIcons{
+    display: flex;
+    justify-content: center;
+}
+.socialIcons a{
+    text-decoration: none;
+    padding:  10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 30%;
+}
+.socialIcons a i{
+    font-size: 2.0 em;
+    color: black;
+    opacity: 0,9;
+}
+/* Hover affect on social media icon */
+.socialIcons a:hover{
+    background-color: #111;
+    transition: 0.5s;
+}
+.socialIcons a:hover i{
+    color: white;
+    transition: 0.5s;
+}
+.footerNav{
+    margin: 15px 0;
+}
+.footerNav ul{
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+.footerNav ul li a{
+    color:white;
+    margin: 20px;
+    text-decoration: none;
+    font-size: 1em;
+    opacity: 0.7;
+    transition: 0.5s;
+
+}
+.footerNav ul li a:hover{
+    opacity: 1;
+}
+.footerBottom{
+    background-color: #000;
+    padding: 15px;
+    text-align: center;
+}
+.footerBottom p{
+    color: white;
+}
+.designer{
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+    margin: 0px 5px;
+}
+@media (max-width: 700px){
+    .footerNav ul{
+        flex-direction: column;
+    } 
+    .footerNav ul li{
+        width:100%;
+        text-align: center;
+        margin: 10px;
+    }
+    .socialIcons a{
+        padding: 8px;
+        margin: 4px;
+    }
 }
 
 .features {
@@ -251,84 +557,3 @@ nav ul li a {
 .feature-card-link:hover .feature-card-image {
     opacity: 0.8; /* Optionnel : un léger changement visuel au survol */
 }
-
-.features {
-    padding: 60px 0;
-    background: #f8f8f8;
-    text-align: center;
-}
-
-.features h2 {
-    margin-bottom: 40px;
-    font-size: 2.5em;
-}
-
-.features-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.offer-card {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: left;
-    width: 300px; /* Ajustez la largeur selon vos besoins */
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
-}
-
-.offer-card:hover {
-    transform: translateY(-10px);
-}
-
-.offer-img-wrapper {
-    width: 100%;
-    height: 200px; /* Ajustez la hauteur selon vos besoins */
-    overflow: hidden;
-}
-
-.offer-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.offer-content {
-    padding: 20px;
-}
-
-.offer-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-
-.offer-description {
-    font-size: 0.9em;
-    margin-bottom: 20px;
-    color: #666;
-}
-
-.offer-price {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.offer-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background 0.3s ease;
-}
-
-.offer-link:hover {
-    background: #0056b3;
-}
-

@@ -31,18 +31,17 @@ $droits_utilisateur = $droits[$user_type];
 </head>
 <body>
     <header>
-        
     	<nav class="navbar">
   	        <a href="#" class="logo">Infinity Love<span>.<span></a>
                 <ul class="menu-links">
                     <li><a href="#hero-section">Accueil</a></li> 
                     <li><a href="#features">Offres</a></li>
-                    <li><a href="recherche.php">Recherche</a></li> <!-- Lien transformé en bouton -->
                     <?php
                     // Vérifiez si l'utilisateur est connecté
                     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
                         echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                         echo '<li><a href="mon_profil.php">Mon profil</a></li>';
+                        echo '<li><a href="recherche.php">Recherche</a></li> ';
                     } else {
                         echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
                         echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
@@ -74,9 +73,16 @@ $droits_utilisateur = $droits[$user_type];
     
     <main>
         <?php if ($user_type !== 'visiteur') : ?>
+            <style>
+                header {
+                background-color: black;
+                position : relative;
+                }
+                </style>
         <section class="users">
             <div class="container">
-                <h2>Derniers utilisateurs inscrits</h2>
+                <h2>Des profils qui vous tentent ?</h2>
+                <h3>Découvrez ci-dessous les 10 derniers inscrits !</h3>
                 <div id="scroll-gallery-feature-cards" class="gallery gallery-align-start gallery-feature-cards">
                     <div class="scroll-container">
                         <div class="item-container">
@@ -143,6 +149,8 @@ $droits_utilisateur = $droits[$user_type];
             </div>
         </section>
 
+        <?php endif; ?>
+<?php if ($user_type === 'visiteur' || $user_type === 'utilisateur') : ?>
 <section class="features" id="features">
 <div class=pricing_table>
     <div class=details>

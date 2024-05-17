@@ -153,17 +153,17 @@ $droits_utilisateur = $droits[$user_type];
         <div class="box basic">
             <div class="title">Classique</div>
                 <div class="price">
-                    <b>9.99$</b>
+                    <b>0$</b>
                     <span>par mois</span>
                 </div>
                 <div class="features">
-                    <div>info 1</div>
-                    <div>Info 2</div>
-                    <div>Info 3</div>
-                    <div>Info 4</div>
+                    <div>✅ Création de compte</div>
+                    <div>✅ Consultation de 10 profils</div>
+                    <div>❌ Messagerie</div>
+                    <div>❌ Like et amitié</div>
                 </div>
                 <div class="button">
-                    <button>Découvrir</button>
+                    <button onclick="window.location.href='inscription.php'">Découvrir</button>
                 </div>
         </div>
         <div class="box pro">
@@ -173,10 +173,10 @@ $droits_utilisateur = $droits[$user_type];
                     <span>par mois</span>
                 </div>
                 <div class="features">
-                    <div>info 1</div>
-                    <div>Info 2</div>
-                    <div>Info 3</div>
-                    <div>Info 4</div>
+                    <div>✅ Création de compte</div>
+                    <div>✅ Consultation de profils illimités</div>
+                    <div>✅ Messagerie </div>
+                    <div>✅ Like et amitié</div>
                 </div>
                 <div class="button">
                     <button>Découvrir</button>

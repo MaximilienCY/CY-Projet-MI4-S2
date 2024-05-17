@@ -265,7 +265,7 @@ background: #fff;
 }
 
 .pricing_table .grid .box.pro .features > * {
-    color: #fff;
+    color: #474645;
     border-bottom:1px solid rgba(red, green, blue, 0.5) ;
 }
 
@@ -374,7 +374,7 @@ footer{
 }
 
 .features {
-    padding: 60px 0;
+    padding: 0px 0;
     background: #fff;
 }
 

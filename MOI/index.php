@@ -1,237 +1,566 @@
-<?php
-session_start();
+/* Importing Google font - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-// Initialiser la session de base pour les visiteurs
-if (!isset($_SESSION['user_type'])) {
-    $_SESSION['user_type'] = 'visiteur';
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-$user_type = $_SESSION['user_type'];
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+}
 
-// Définir les droits pour chaque type d'utilisateur
-$droits = [
-    'visiteur' => ['voir_profil_public'],
-    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs'],
-    'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
-    'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
-];
+header .navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-$droits_utilisateur = $droits[$user_type];
-?>
+.navbar .logo {
+  color: #fff;
+  font-weight: 600;
+  font-size: 2.1rem;
+  text-decoration: none;
+}
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinity'love - RencontreSite</title>
-    <link rel="stylesheet" href="accueil.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+.navbar .logo span {
+  color: #C06B3E;
+}
+
+.navbar .menu-links {
+  display: flex;
+  list-style: none;
+  gap: 35px;
+}
+.navbar button{
+background: #fff;
+  padding: 4px 12px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.navbar button:hover {
+    color: #fff;
+    background: #C06B3E;
+  }
+
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #C06B3E;
+}
+
+
+
+.hero-section {
+  height: 100vh;
+  background-image: url("uploads/steelwool-458842_1920.jpg");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.hero-section .content {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  color: #fff;
+}
+
+.hero-section .content h2 {
+  font-size: 3rem;
+  max-width: 600px;
+  line-height: 70px;
+}
+
+.hero-section .content p {
+  font-weight: 300;
+  max-width: 600px;
+  margin-top: 15px;
+}
+
+.hero-section .content button {
+  background: #fff;
+  padding: 12px 30px;
+  border: none;
+  font-size: 1rem;
+  border-radius: 6px;
+  margin-top: 38px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.hero-section .content button:hover {
+  color: #fff;
+  background: #C06B3E;
+}
+
+#close-menu-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  cursor: pointer;
+  display: none;
+}
+
+#hamburger-btn {
+  color: #fff;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 10px;
+  }
+
+  header.show-mobile-menu::before {
+    content: "";
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(5px);
+  }
+
+  .navbar .logo {
+    font-size: 1.7rem;
+  }
+
     
-</head>
-<body>
-    <header>
-    	<nav class="navbar">
-  	        <a href="#" class="logo">Infinity Love<span>.<span></a>
-                <ul class="menu-links">
-                    <li><a href="#hero-section">Accueil</a></li> 
-                    <li><a href="#features">Offres</a></li>
-                    <?php
-                    // Vérifiez si l'utilisateur est connecté
-                    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
-                        echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
-                        echo '<li><a href="mon_profil.php">Mon profil</a></li>';
-                        echo '<li><a href="recherche.php">Recherche</a></li> ';
-                    } else {
-                        echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
-                        echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
-                    }
+  #hamburger-btn, #close-menu-btn {
+    display: block;
+  }
 
-                    if (in_array('envoyer_messages', $droits_utilisateur)) {
-                        echo '<li><a href="messages.php">Messages</a></li>';
-                    }
-                    if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
-                        echo '<li><a href="admin.php">Administration</a></li>';
-                    }
+  .navbar .menu-links {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background: #fff;
+    flex-direction: column;
+    padding: 70px 40px 0;
+    transition: left 0.2s ease;
+  }
 
-                    // Si l'action de déconnexion est demandée
-                    if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-                        // Détruisez toutes les variables de session
-                        $_SESSION = array();
+  header.show-mobile-menu .navbar .menu-links {
+    left: 0;
+  }
 
-                        // Détruisez la session
-                        session_destroy();
+  .navbar a {
+    color: #000;
+  }
 
-                        // Redirigez l'utilisateur vers la page d'accueil après la déconnexion
-                        header("Location: index.php");
-                        exit;
-                    }
-                    ?>
-                </ul>
-            </nav>
-    </header>
+  .hero-section .content {
+    text-align: center;
+  }
+
+  .hero-section .content :is(h2, p) {
+    max-width: 100%;
+  }
+
+  .hero-section .content h2 {
+    font-size: 2.3rem;
+    line-height: 60px;
+  }
+  
+  .hero-section .content button {
+    padding: 9px 18px;
+  }
+}
+
+.pricing_table{
+    padding: 40px 0px;
+    background-color: #f7f0f0;
+}
+
+.pricing_table .details{
+    width :90%;
+    max-width: 500px;
+    text-align: center;
+    margin : 0 auto;
+    padding: 40px 20px;
+}
+
+.pricing_table .grid{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px 0px;
+    padding : 20px;
+}
+
+.pricing_table .grid .box{
+    width: 250px;
+    border: 1px solid #eee;
+    text-align: center;
+    padding: 20px;
+    background:#fff;
+    border-radius : 10px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.pricing_table .grid .box .price{
+    margin-bottom: 20px;
+}
+
+.pricing_table .grid .box .price b{
+    display: block;
+    font-size: 40px;
+    margin-bottom: -5px;
+}
+
+.pricing_table .grid .box .features > *{
+    color :#474645;
+    padding: 8px 0px;
+    border-bottom : 1px solid rgba(0,0,0,0.2);
+}
+
+.pricing_table .grid .box .button button{
+    width: 100%;
+    margin: 25px 0px 0px;
+    padding : 10px;
+    background: #C06B3E;
+    color:#000000;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    font-weight: 600;
+    cursor:pointer;
+}
+
+.pricing_table .grid .box.pro {
+    transform:scale(1.1);
+    background-color: #C06B3E;
+}
+
+.pricing_table .grid .box.pro .title{
+    color: #fff;
+}
+
+.pricing_table .grid .box.pro .price{
+    color: #fff;
+}
+
+.pricing_table .grid .box.pro .features > * {
+    color: #474645;
+    border-bottom:1px solid rgba(red, green, blue, 0.5) ;
+}
+
+.pricing_table .grid .box.pro .button button{
+    background: #fff;
+    color: #C06B3E;
+}
+
+.pricing_table .grid .box.basic .button button{
+    background: #C06B3E;
+    color: #fff;
+}
+
+.pricing_table .grid .box.basic .button button:hover{
+    background: #fff;
+    color: #000000;
+    transition: 0.4s ease;
+}
+
+.pricing_table .grid .box.box.pro .button button:hover{
+    background: #C06B3E;
+    color: #fff;
+    transition: 0.4s ease;
+}
+
+footer{
+    background-color: #111;
+}
+.footerContainer{
+    width: 100%;
+    padding: 40px 26px 17px ;
+}
+.socialIcons{
+    display: flex;
+    justify-content: center;
+}
+.socialIcons a{
+    text-decoration: none;
+    padding:  10px;
+    background-color: white;
+    margin: 10px;
+    border-radius: 30%;
+}
+.socialIcons a i{
+    font-size: 2.0 em;
+    color: black;
+    opacity: 0,9;
+}
+/* Hover affect on social media icon */
+.socialIcons a:hover{
+    background-color: #111;
+    transition: 0.5s;
+}
+.socialIcons a:hover i{
+    color: white;
+    transition: 0.5s;
+}
+.footerNav{
+    margin: 15px 0;
+}
+.footerNav ul{
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+}
+.footerNav ul li a{
+    color:white;
+    margin: 20px;
+    text-decoration: none;
+    font-size: 1em;
+    opacity: 0.7;
+    transition: 0.5s;
+
+}
+.footerNav ul li a:hover{
+    opacity: 1;
+}
+.footerBottom{
+    background-color: #000;
+    padding: 15px;
+    text-align: center;
+}
+.footerBottom p{
+    color: white;
+}
+.designer{
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+    margin: 0px 5px;
+}
+@media (max-width: 700px){
+    .footerNav ul{
+        flex-direction: column;
+    } 
+    .footerNav ul li{
+        width:100%;
+        text-align: center;
+        margin: 10px;
+    }
+    .socialIcons a{
+        padding: 8px;
+        margin: 4px;
+    }
+}
+
+.features {
+    padding: 0px 0;
+    background: #fff;
+}
+
+.features h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2em;
+}
+
+.features-grid {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.offer-card {
+    width: 30%;
+    padding: 10px;
+    border: 1px solid #e1e1e1;
+    border-radius: 10px;
+    background: #f8f8f8;
+}
+
+.offer-img-wrapper {
+    margin-bottom: 20px;
+}
+
+.offer-img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.offer-title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.offer-description {
+    margin-bottom: 10px;
+}
+
+.offer-price {
+    font-weight: bold;
+}
+
+.search {
+    background: #f1f1f1;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.search h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.search form {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.search input[type="text"] {
+    padding: 10px;
+    font-size: 1em;
+}
+
+.search button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.users {
     
-    <main>
-        <?php if ($user_type !== 'visiteur') : ?>
-            <style>
-                header {
-                background-color: black;
-                position : relative;
-                }
-                </style>
-        <section class="users">
-            <div class="container">
-                <h2>Des profils qui vous tentent ?</h2>
-                <h3>Découvrez ci-dessous les 10 derniers inscrits !</h3>
-                <div id="scroll-gallery-feature-cards" class="gallery gallery-align-start gallery-feature-cards">
-                    <div class="scroll-container">
-                        <div class="item-container">
-                            <ul class="card-set" role="list">
-                                <?php
-                                // Inclure le fichier contenant les fonctions
-                                require_once 'fonctions.php';
+    background-color: #f7f0f0;
+}
 
-                                // Utiliser la fonction pour obtenir les 10 profils les plus récents
-                                $filePath = "utilisateurs.txt";
-                                $recentProfiles = getRecentProfiles($filePath);
-
-                                if (count($recentProfiles) > 0) {
-                                    foreach ($recentProfiles as $user) {
-                                        echo "<li role='listitem' class='gallery-item grid-item'>";
-                                        echo "<a href='profil.php?id=" . urlencode($user['id']) . "' class='feature-card-link'>";
-                                        echo "<div class='feature-card card-container'>";
-                                        echo "<figure class='feature-card-image-container'>";
-                                        echo "<img src='" . htmlspecialchars($user['photo']) . "' alt='Photo de " . htmlspecialchars($user['prenom']) . "' class='feature-card-image'>";
-                                        echo "</figure>";
-                                        echo "<div class='card-modifier card-padding theme-dark fixed-width'>";
-                                        echo "<div class='card-viewport-content'>";
-                                        echo "<div class='feature-card-content'>";
-                                        echo "<div class='feature-card-copy'>";
-                                        echo "<p class='typography-feature-card-label feature-card-label'>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</p>";
-                                        echo "<p class='typography-card-headline feature-card-headline'>Date d'inscription: " . htmlspecialchars($user['date_creation']) . "<br>Ville: " . htmlspecialchars($user['ville']) . "<br>Statut: " . htmlspecialchars($user['statut']) . "</p>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</a>";
-                                        echo "</li>";
-                                    }
-                                } else {
-                                    echo "<p>Aucun utilisateur trouvé</p>";
-                                }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="paddlenav paddlenav-alpha">
-                        <ul class="sticky-element">
-                            <li class="left-item"><button aria-label="Précédent" class="paddlenav-arrow paddlenav-arrow-previous" disabled="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path d="M21.559,12.062 L15.618,17.984 L21.5221,23.944 C22.105,24.533 22.1021,25.482 21.5131,26.065 C21.2211,26.355 20.8391,26.4999987 20.4571,26.4999987 C20.0711,26.4999987 19.6851,26.352 19.3921,26.056 L12.4351,19.034 C11.8531,18.446 11.8551,17.4999987 12.4411,16.916 L19.4411,9.938 C20.0261,9.353 20.9781,9.354 21.5621,9.941 C22.1471,10.528 22.1451,11.478 21.5591,12.062 L21.559,12.062 Z"></path></svg>
-                            </button></li>
-                            <li class="right-item"><button aria-label="Suivant" class="paddlenav-arrow paddlenav-arrow-next">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><path d="M23.5587,16.916 C24.1447,17.4999987 24.1467,18.446 23.5647,19.034 L16.6077,26.056 C16.3147,26.352 15.9287,26.4999987 15.5427,26.4999987 C15.1607,26.4999987 14.7787,26.355 14.4867,26.065 C13.8977,25.482 13.8947,24.533 14.4777,23.944 L20.3818,17.984 L14.4408,12.062 C13.8548,11.478 13.8528,10.5279 14.4378,9.941 C15.0218,9.354 15.9738,9.353 16.5588,9.938 L23.5588,16.916 L23.5587,16.916 Z"></path></svg>
-                            </button></li>
-                            <div class="scrim"></div>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <?php endif; ?>
-
-        <?php if ($user_type === 'visiteur') : ?>
-        <section class="hero-section" id="hero-section">
-            <div class="content">
-                <h2>Trouvez l'amour de votre vie</h2>
-                <p>Rejoignez notre communauté dès maintenant et commencez votre voyage vers une relation significative.</p>
-                <button onclick="window.location.href='inscription.php'">Je m'inscris</button>
-            </div>
-        </section>
-
-        <?php endif; ?>
-<?php if ($user_type === 'visiteur' || $user_type === 'utilisateur') : ?>
-<section class="features" id="features">
-<div class=pricing_table>
-    <div class=details>
-        <h1>Nos offres</h1>
-        <p>Découvrez sans plus attendre nos offres d'abonnement !</p>
-    </div>
-    <div class="grid">
-        <div class="box basic">
-            <div class="title">Classique</div>
-                <div class="price">
-                    <b>0$</b>
-                    <span>par mois</span>
-                </div>
-                <div class="features">
-                    <div>✅ Création de compte</div>
-                    <div>✅ Consultation de 10 profils</div>
-                    <div>❌ Messagerie</div>
-                    <div>❌ Like et amitié</div>
-                </div>
-                <div class="button">
-                    <button onclick="window.location.href='inscription.php'">Découvrir</button>
-                </div>
-        </div>
-        <div class="box pro">
-            <div class="title">Premium</div>
-                <div class="price">
-                    <b>$14.99</b>
-                    <span>par mois</span>
-                </div>
-                <div class="features">
-                    <div>✅ Création de compte</div>
-                    <div>✅ Consultation de profils illimités</div>
-                    <div>✅ Messagerie </div>
-                    <div>✅ Like et amitié</div>
-                </div>
-                <div class="button">
-                    <button>Découvrir</button>
-                </div>
-        
-        </div>
-    </div>
-</div>
-</section>
-
-        
-        <?php endif; ?>
-
-    </main>
+.users h2 {
+    text-align: center;
     
-    <script>
-      const header = document.querySelector("header");
-      const hamburgerBtn = document.querySelector("#hamburger-btn");
-      const closeMenuBtn = document.querySelector("#close-menu-btn");
-      // Toggle mobile menu on hamburger button click
-      hamburgerBtn.addEventListener("click", () => header.classList.toggle("show-mobile-menu"));
-      // Close mobile menu on close button click
-      closeMenuBtn.addEventListener("click", () => hamburgerBtn.click());
-    </script>
+    font-size: 2em;
+}
 
-    <footer>
-    <div class="footerContainer">
-        <div class="socialIcons">
-            <a href=""><i class="fa-brands fa-facebook"></i></a>
-            <a href=""><i class="fa-brands fa-instagram"></i></a>
-            <a href=""><i class="fa-brands fa-twitter"></i></a>
-            <a href=""><i class="fa-brands fa-google-plus"></i></a>
-            <a href=""><i class="fa-brands fa-youtube"></i></a>
-        </div>
-        <div class="footerNav">
-            <ul><li><a href="#hero-section">Accueuil</a></li>
-                <li><a href="">A propos</a></li>
-                <li><a href="">Nous contacter</a></li>
-                <li><a href="">Notre équipe</a></li>
-                <li><a href="">Foire aux questions</a></li>
-            </ul>
-        </div>
-        
-    </div>
-    <div class="footerBottom">
-    <p>&copy; 2024 Infinity'love - Tous droits réservés</p>
-    </div>
-</footer>
-</body>
-</html>
+.users h3 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1em;
+}
+
+
+.gallery {
+    overflow: hidden;
+    position: relative;
+}
+
+.scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+.item-container {
+    display: flex;
+}
+
+.card-set {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gallery-item {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.feature-card {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.feature-card-image-container {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.feature-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assure que les images remplissent le conteneur */
+    object-position: center; /* Centre l'image */
+}
+
+.card-padding {
+    padding: 15px;
+}
+
+.feature-card-content {
+    padding: 15px;
+}
+
+.typography-feature-card-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.typography-card-headline {
+    margin: 0;
+}
+
+.paddlenav {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+}
+
+.paddlenav-arrow {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.paddlenav-arrow-previous:disabled, .paddlenav-arrow-next:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.feature-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+.feature-card-link:hover .feature-card-image {
+    opacity: 0.8; /* Optionnel : un léger changement visuel au survol */
+}

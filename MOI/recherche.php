@@ -49,6 +49,8 @@
                     header("Location: index.php");
                     exit;
                 }
+
+                $user_id_session = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; // Stocker l'ID de l'utilisateur connecté
                 ?>
             </div>
         </nav>
@@ -188,6 +190,11 @@
                                 $match = false;
                             }
                             if ($personal_info && strpos($personal_info_user, $personal_info) === false) {
+                                $match = false;
+                            }
+
+                            // Exclude the connected user's profile
+                            if ($user_id_session && $user_id == $user_id_session) {
                                 $match = false;
                             }
 

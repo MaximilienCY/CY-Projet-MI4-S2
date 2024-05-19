@@ -115,8 +115,9 @@
                     <button type="submit">Rechercher</button>
                 </form>
             </div>
-            
+
             <?php
+
             function calculateAge($birthdate) {
                 $birthdate = new DateTime($birthdate);
                 $today = new DateTime();
@@ -135,14 +136,14 @@
                 $physical_description = strtolower(trim($_GET['physical_description']));
                 $personal_info = strtolower(trim($_GET['personal_info']));
                 $filename = 'utilisateurs.txt';
-                
+
                 if (file_exists($filename)) {
                     $file = fopen($filename, 'r');
                     if ($file) {
                         $profilesFound = false; // Variable to track if any profiles are found
                         echo '<h2>Résultats de la recherche :</h2>';
                         echo '<div class="profile-container">';
-                        
+
                         while (($line = fgets($file)) !== false) {
                             $data = explode(',', $line);
                             $user_id = $data[0];
@@ -159,6 +160,7 @@
                             $personal_info_user = strtolower($data[11]);
                             $photo_address = $data[12];
                             $user_type = $data[13];
+                            $ban = $data[14];
 
                             $age_user = calculateAge($birthdate);
 
@@ -190,6 +192,11 @@
                                 $match = false;
                             }
                             if ($personal_info && strpos($personal_info_user, $personal_info) === false) {
+                                $match = false;
+                            }
+
+                            // Exclude banned users
+                            if ($ban == 'oui') {
                                 $match = false;
                             }
 
@@ -230,6 +237,7 @@
                 }
             }
             ?>
+
         </div>
     </div>
 

@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+.navbar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar .menu-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar .menu-links li {
+    margin: 0 10px;
+}
+
+.navbar .menu-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar .auth-buttons button {
+    background-color: #ff4757;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.container {
+    display: flex;
+    padding: 20px;
+}
+
+.directory {
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.directory h2 {
+    margin-top: 0;
+}
+
+.directory ul {
+    list-style: none;
+    padding: 0;
+}
+
+.directory li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.messages {
+    flex: 2;
+    background-color: white;
+    padding: 20px;
+}
+
+.messages h2 {
+    margin-top: 0;
+}
+
+.message {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.message form {
+    margin-top: 10px;
+}
+
+.new-message {
+    margin-top: 20px;
+}
+
+.new-message form input,
+.new-message form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+}
+
+.new-message form input[type="submit"] {
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+

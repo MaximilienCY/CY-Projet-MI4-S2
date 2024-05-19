@@ -48,7 +48,7 @@ $droits_utilisateur = $droits[$user_type];
                     }
 
                     if (in_array('envoyer_messages', $droits_utilisateur)) {
-                        echo '<li><a href="messages.php">Messages</a></li>';
+                        echo '<li><a href="message.php">Messages</a></li>';
                     }
                     if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
                         echo '<li><a href="admin.php">Administration</a></li>';

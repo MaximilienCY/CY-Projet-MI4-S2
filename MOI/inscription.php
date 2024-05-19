@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $relationship_status = $_POST['relationship_status'];
     $physical_description = $_POST['physical_description'];
     $personal_info = $_POST['personal_info'];
+    $ban= 'non'; //Utilisateur banni ou non (Initialement non)
 
     // Traitement de l'image
     $target_dir = "uploads/";
@@ -44,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $photo_address = $target_file;
 
     // Formatage des données pour le stockage dans le fichier
-    $data = $user_id . "," . $first_name . "," . $name . "," . $mail . "," . $password . "," . $gender . "," . $birthdate . "," . $profession . "," . $residence . "," . $relationship_status . "," . $physical_description . "," . $personal_info . "," . $photo_address . "," . $user_type ."\n";
+    $data = $user_id . "," . $first_name . "," . $name . "," . $mail . "," . $password . "," . $gender . "," . $birthdate . "," . $profession . "," . $residence . "," . $relationship_status . "," . $physical_description . "," . $personal_info . "," . $photo_address . "," . $user_type . "," . $ban ."\n";
 
     // Ouverture du fichier en mode append
     $file = fopen("utilisateurs.txt", "a");
@@ -206,6 +207,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
     <div class="footerBottom">
     <p>&copy; 2024 Infinity'love - Tous droits réservés</p>
+    </div>
+</footer>
+</body>
+</html>
+
     </div>
 </footer>
 </body>

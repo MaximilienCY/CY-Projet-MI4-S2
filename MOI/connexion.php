@@ -17,10 +17,6 @@ $droits = [
 ];
 
 $droits_utilisateur = $droits[$user_type];
-?>
-
-<?php
-session_start();
 
 // Vérifie si le formulaire de connexion a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -41,6 +37,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Si les identifiants sont valides, définir les informations de session
             $_SESSION['user_id'] = $data[0]; // ID de l'utilisateur
             $_SESSION['user_type'] = trim($data[13]); // Type d'utilisateur
+
+            if ($data[14] == "oui"){
+                // Le compte est bannis faire une page pour l'indiquer
+                echo "<div class='message'>Vous êtes bannis.</div>";
+                break;
+            }
+
             fclose($file);
 
             // Redirection vers la page d'accueil après la connexion
@@ -49,8 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    // Si les identifiants ne correspondent à aucun utilisateur, afficher un message d'erreur
-    echo "<div class='message'>Nom d'utilisateur ou mot de passe incorrect.</div>";
+    if ($data[14] == "non") {
+        // Si les identifiants ne correspondent à aucun utilisateur, afficher un message d'erreur
+        echo "<div class='message'>Nom d'utilisateur ou mot de passe incorrect.</div>";
+    }
+
     fclose($file);
 }
 ?>
@@ -164,7 +170,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </footer>
 </body>
-
-
 </html>
 

@@ -120,7 +120,7 @@ $droits_utilisateur = $droits[$user_type];
                                         echo "<div class='feature-card-content'>";
                                         echo "<div class='feature-card-copy'>";
                                         echo "<p class='typography-feature-card-label feature-card-label'>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</p>";
-                                        echo "<p class='typography-card-headline feature-card-headline'>Date d'inscription: " . htmlspecialchars($user['date_creation']) . "<br>Ville: " . htmlspecialchars($user['ville']) . "<br>Statut: " . htmlspecialchars($user['statut']) . "</p>";
+                                        echo "<p class='typography-card-headline feature-card-headline'>Date de naissance:<br> " . htmlspecialchars($user['date_creation']) . "<br>Ville: " . htmlspecialchars($user['ville']) . "<br>Statut: " . htmlspecialchars($user['statut']) . "</p>";
                                         echo "</div>";
                                         echo "</div>";
                                         echo "</div>";

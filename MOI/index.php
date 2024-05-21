@@ -42,7 +42,6 @@ $droits_utilisateur = $droits[$user_type];
                     // Vérifiez si l'utilisateur est connecté
                     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
                         echo '<li><a href="mon_profil.php">Mon profil</a></li>';
-                        echo '<li><a href="recherche.php">Recherche</a></li> ';
                     } else {
                         echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
                         echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
@@ -56,6 +55,7 @@ $droits_utilisateur = $droits[$user_type];
                     }
 
                     if ($user_type !== 'visiteur'){
+                        echo '<li><a href="recherche.php">Recherche</a></li> ';
                         echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                     }
 

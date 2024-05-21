@@ -11,7 +11,7 @@ $user_type = $_SESSION['user_type'];
 // Définir les droits pour chaque type d'utilisateur
 $droits = [
     'visiteur' => ['voir_profil_public'],
-    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive'],
     'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
     'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
 ];
@@ -75,12 +75,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['upgrade_to_abonne'])) 
         <a href="#" class="logo">Infinity Love<span>.<span></a>
         <ul class="menu-links">
             <li><a href="index.php">Accueil</a></li> 
-            <li><a href="#features">Offres</a></li>
-            <li><a href="recherche.php">Recherche</a></li>
             <?php
             // Vérifiez si l'utilisateur est connecté
+            if ($user_type === 'visiteur'|| $user_type === 'utilisateur') {
+                echo '<li><a href="#features">Offres</a></li>';
+            }
+            // Vérifiez si l'utilisateur est connecté
             if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
-                echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                 echo '<li><a href="mon_profil.php">Mon profil</a></li>';
             } else {
                 echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
@@ -88,11 +89,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['upgrade_to_abonne'])) 
             }
 
             if (in_array('envoyer_messages', $droits_utilisateur)) {
-                echo '<li><a href="messages.php">Messages</a></li>';
+                echo '<li><a href="message.php">Messages</a></li>';
             }
             if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
                 echo '<li><a href="admin.php">Administration</a></li>';
             }
+
+            if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
+                echo '<li><a href="recherche.php">Recherche</a></li> ';
+            }
+
+            if ($user_type !== 'visiteur'){
+                echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
+            }
+
 
             // Si l'action de déconnexion est demandée
             if (isset($_GET['action']) && $_GET['action'] === 'logout') {

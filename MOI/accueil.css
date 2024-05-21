@@ -581,16 +581,17 @@ h3 {
     text-align: center;
 }
 
-.users p{
-   
-    text-align: center;
-    margin-bottom: 50px;
-}
 
 section.users{
     background-image: url(uploads/output.jpg)
 }
 
+.users p{
+    text-align: center;
+}
+
 .p-title{
+    text-align: center;
     color: white;
+    margin-bottom: 50px;
 }

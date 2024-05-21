@@ -11,7 +11,7 @@ $user_type = $_SESSION['user_type'];
 // Définir les droits pour chaque type d'utilisateur
 $droits = [
     'visiteur' => ['voir_profil_public'],
-    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
     'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
     'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
 ];

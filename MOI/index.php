@@ -57,11 +57,13 @@ $droits_utilisateur = $droits[$user_type];
                     if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
                         echo '<li><a href="recherche.php">Recherche</a></li> ';
                     }
-
+                    
                     if ($user_type !== 'visiteur'){
-                        echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
+                  
+                        echo '<li><a href="index.php?action=logout" class="btn-logout">Déconnexion</a></li>';
+                       
                     }
-
+                    
                     // Si l'action de déconnexion est demandée
                     if (isset($_GET['action']) && $_GET['action'] === 'logout') {
                         // Détruisez toutes les variables de session
@@ -90,7 +92,9 @@ $droits_utilisateur = $droits[$user_type];
         <section class="users">
             <div class="container">
                 <h2>Des profils qui vous tentent ?</h2>
-                <h3>Découvrez ci-dessous les 10 derniers inscrits !</h3>
+                <div class="p-title">
+                <p>Découvrez ci-dessous les 10 derniers inscrits !</p>
+                </div>
                 <div id="scroll-gallery-feature-cards" class="gallery gallery-align-start gallery-feature-cards">
                     <div class="scroll-container">
                         <div class="item-container">

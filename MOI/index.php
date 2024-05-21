@@ -11,7 +11,7 @@ $user_type = $_SESSION['user_type'];
 // Définir les droits pour chaque type d'utilisateur
 $droits = [
     'visiteur' => ['voir_profil_public'],
-    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive'],
     'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
     'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
 ];
@@ -54,8 +54,11 @@ $droits_utilisateur = $droits[$user_type];
                         echo '<li><a href="admin.php">Administration</a></li>';
                     }
 
-                    if ($user_type !== 'visiteur'){
+                    if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
                         echo '<li><a href="recherche.php">Recherche</a></li> ';
+                    }
+
+                    if ($user_type !== 'visiteur'){
                         echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                     }
 

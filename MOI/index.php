@@ -35,11 +35,12 @@ $droits_utilisateur = $droits[$user_type];
   	        <a href="#" class="logo">Infinity Love<span>.<span></a>
                 <ul class="menu-links">
                     <li><a href="#hero-section">Accueil</a></li> 
-                    <li><a href="#features">Offres</a></li>
                     <?php
+                    if ($user_type === 'visiteur'|| $user_type === 'utilisateur') {
+                        echo '<li><a href="#features">Offres</a></li>';
+                    }
                     // Vérifiez si l'utilisateur est connecté
                     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
-                        echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                         echo '<li><a href="mon_profil.php">Mon profil</a></li>';
                         echo '<li><a href="recherche.php">Recherche</a></li> ';
                     } else {
@@ -52,6 +53,10 @@ $droits_utilisateur = $droits[$user_type];
                     }
                     if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
                         echo '<li><a href="admin.php">Administration</a></li>';
+                    }
+
+                    if ($user_type !== 'visiteur'){
+                        echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                     }
 
                     // Si l'action de déconnexion est demandée
@@ -186,7 +191,12 @@ $droits_utilisateur = $droits[$user_type];
                     <div>✅ Like et amitié</div>
                 </div>
                 <div class="button">
-                    <button>Découvrir</button>
+                <?php if ($user_type === 'visiteur') : ?> 
+                <button onclick="window.location.href='inscription.php'">Découvrir</button>
+                <?php endif; ?>
+                <?php if ($user_type === 'utilisateur') : ?> 
+                    <button onclick="window.location.href='abonnement.php'">Découvrir</button>
+                <?php endif; ?>
                 </div>
         
         </div>

@@ -69,7 +69,7 @@ background: #fff;
 
 .hero-section {
   height: 200vh;
-  background-image: url("uploads/output.jpg");
+  background-image: url("../MOI/uploads/output.jpg");
   background-position: center;
   background-size: cover;
   display: flex;
@@ -345,4 +345,3 @@ footer{
     background-color: #C06B3E;
 
 }
-

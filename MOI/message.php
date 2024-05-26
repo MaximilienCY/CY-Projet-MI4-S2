@@ -7,6 +7,25 @@ if (!$user_id_session) {
     exit;
 }
 
+session_start();
+
+// Initialiser la session de base pour les visiteurs
+if (!isset($_SESSION['user_type'])) {
+    $_SESSION['user_type'] = 'visiteur';
+}
+
+$user_type = $_SESSION['user_type'];
+
+// Définir les droits pour chaque type d'utilisateur
+$droits = [
+    'visiteur' => ['voir_profil_public'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive'],
+    'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
+    'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
+];
+
+$droits_utilisateur = $droits[$user_type];
+
 include 'functionsmessagerie.php';
 
 $users = getUsers();
@@ -101,29 +120,55 @@ function getUserProfilePhotoById($id) {
 </head>
 <body>
 <header>
-    <nav class="navbar">
-        <a href="index.php" class="logo">Infinity Love<span>.</span></a>
-        <ul class="menu-links">
-            <li><a href="index.php#hero-section">Accueil</a></li>
-            <li><a href="recherche.php">Recherche</a></li>
-            <li><a href="message.php">Messages</a></li>
-        </ul>
-        <div class="auth-buttons">
-            <?php 
-            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+    	<nav class="navbar">
+  	        <a href="#" class="logo">Infinity Love<span>.<span></a>
+                <ul class="menu-links">
+                    <li><a href="#hero-section">Accueil</a></li> 
+                    <?php
+                    if ($user_type === 'visiteur'|| $user_type === 'utilisateur') {
+                        echo '<li><a href="#features">Offres</a></li>';
+                    }
+                    // Vérifiez si l'utilisateur est connecté
+                    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
                         echo '<li><a href="mon_profil.php">Mon profil</a></li>';
-                    } 
-            
-            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur'): ?>
-                <button onclick="window.location.href='index.php?action=logout'">Déconnexion</button>
-            <?php else: ?>
-                <button onclick="window.location.href='inscription.php'">Inscription</button>
-                <button onclick="window.location.href='connexion.php'">Connexion</button>
-            <?php endif; ?>
-        </div>
-    </nav>
-</header>
+                    } else {
+                        echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
+                        echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
+                    }
 
+                    if (in_array('envoyer_messages', $droits_utilisateur)) {
+                        echo '<li><a href="message.php">Messages</a></li>';
+                    }
+                    if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
+                        echo '<li><a href="admin.php">Administration</a></li>';
+                    }
+
+                    if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
+                        echo '<li><a href="recherche.php">Recherche</a></li> ';
+                    }
+                    
+                    if ($user_type !== 'visiteur'){
+                  
+                        echo '<li><a href="index.php?action=logout" class="btn-logout">Déconnexion</a></li>';
+                       
+                    }
+                    
+                    // Si l'action de déconnexion est demandée
+                    if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+                        // Détruisez toutes les variables de session
+                        $_SESSION = array();
+
+                        // Détruisez la session
+                        session_destroy();
+
+                        // Redirigez l'utilisateur vers la page d'accueil après la déconnexion
+                        header("Location: index.php");
+                        exit;
+                    }
+                    ?>
+                </ul>
+            </nav>
+    </header>
 <div class="container">
     <div class="sidebar">
         <h2>Profils</h2>

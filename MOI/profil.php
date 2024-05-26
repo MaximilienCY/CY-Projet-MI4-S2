@@ -24,20 +24,20 @@ function getProfileById($filePath, $id) {
             if ($data[0] == $id) {
                 fclose($file);
                 return [
-                    'id' => $data[0],
-                    'prenom' => $data[1],
-                    'nom' => $data[2],
-                    'email' => $data[3],
-                    'mot_de_passe' => $data[4],
-                    'sexe' => $data[5],
-                    'date_naissance' => $data[6], // date de naissance
-                    'profession' => $data[7],
-                    'ville' => $data[8],
-                    'statut' => $data[9],
-                    'description_physique' => $data[10],
-                    'infos_personnelles' => $data[11],
-                    'photo' => $data[12],
-                    'type_utilisateur' => $data[13]
+                    'id' => htmlspecialchars($data[0]),
+                    'prenom' => htmlspecialchars($data[1]),
+                    'nom' => htmlspecialchars($data[2]),
+                    'email' => htmlspecialchars($data[3]),
+                    'mot_de_passe' => htmlspecialchars($data[4]),
+                    'sexe' => htmlspecialchars($data[5]),
+                    'date_naissance' => htmlspecialchars($data[6]), // date de naissance
+                    'profession' => htmlspecialchars($data[7]),
+                    'ville' => htmlspecialchars($data[8]),
+                    'statut' => htmlspecialchars($data[9]),
+                    'description_physique' => htmlspecialchars($data[10]),
+                    'infos_personnelles' => htmlspecialchars($data[11]),
+                    'photo' => htmlspecialchars($data[12]),
+                    'type_utilisateur' => htmlspecialchars($data[13])
                 ];
             }
         }
@@ -54,8 +54,68 @@ function calculerAge($dateNaissance) {
     return $age;
 }
 
+// Fonction pour vérifier si un utilisateur est bloqué
+function isUserBlocked($userId, $blockedUserId) {
+    $filePath = 'blocked_users.txt';
+    $file = fopen($filePath, "r");
+    if ($file) {
+        while (($line = fgets($file)) !== false) {
+            list($blocker, $blocked) = explode(",", trim($line));
+            if ($blocker == $userId && $blocked == $blockedUserId) {
+                fclose($file);
+                return true;
+            }
+        }
+        fclose($file);
+    }
+    return false;
+}
+
+// Fonction pour bloquer un utilisateur
+function blockUser($userId, $blockedUserId) {
+    $filePath = 'blocked_users.txt';
+    $file = fopen($filePath, "a");
+    if ($file) {
+        fwrite($file, "$userId,$blockedUserId\n");
+        fclose($file);
+    }
+}
+
+// Fonction pour débloquer un utilisateur
+function unblockUser($userId, $blockedUserId) {
+    $filePath = 'blocked_users.txt';
+    $lines = file($filePath, FILE_IGNORE_NEW_LINES);
+    $newLines = [];
+    foreach ($lines as $line) {
+        list($blocker, $blocked) = explode(",", trim($line));
+        if ($blocker != $userId || $blocked != $blockedUserId) {
+            $newLines[] = $line;
+        }
+    }
+    file_put_contents($filePath, implode("\n", $newLines) . "\n");
+}
+
 // Vérifier le type d'utilisateur connecté
 $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'visiteur';
+$connectedUserId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+// Rediriger les visiteurs vers la page d'accueil
+if ($connectedUserType == 'visiteur') {
+    header("Location: index.php");
+    exit;
+}
+
+// Gérer le blocage et le déblocage des utilisateurs
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['block'])) {
+        blockUser($connectedUserId, $profileId);
+    } elseif (isset($_POST['unblock'])) {
+        unblockUser($connectedUserId, $profileId);
+    }
+}
+
+// Vérifier si l'utilisateur est bloqué
+$isBlocked = isUserBlocked($connectedUserId, $profileId);
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +132,7 @@ $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'v
         <nav class="navbar">
             <a href="#" class="logo">Infinity Love<span>.<span></a>
             <ul class="menu-links">
-                <li><a href="index.php">Accueil</a></li> 
+                <li><a href="index.php">Accueil</a></li>
                 <li><a href="#features">Offres</a></li>
                 <li><a href="recherche.php">Recherche</a></li>
                 <?php
@@ -86,7 +146,7 @@ $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'v
                 }
 
                 if (isset($_SESSION['droits_utilisateur']) && in_array('envoyer_messages', $_SESSION['droits_utilisateur'])) {
-                    echo '<li><a href="messages.php">Messages</a></li>';
+                    echo '<li><a href="message.php">Messages</a></li>';
                 }
                 if (isset($_SESSION['droits_utilisateur']) && in_array('gerer_utilisateurs', $_SESSION['droits_utilisateur'])) {
                     echo '<li><a href="admin.php">Administration</a></li>';
@@ -111,7 +171,12 @@ $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'v
 
     <main>
         <div class="container">
-            <?php if ($profile): ?>
+            <?php if ($isBlocked): ?>
+                <p>Vous avez bloqué cet utilisateur.</p>
+                <form method="post">
+                    <button type="submit" name="unblock">Débloquer</button>
+                </form>
+            <?php elseif ($profile): ?>
                 <div class="profile-card">
                     <figure class="profile-card-image-container">
                         <img src="<?php echo htmlspecialchars($profile['photo']); ?>" alt="Photo de <?php echo htmlspecialchars($profile['prenom']); ?>" class="profile-card-image">
@@ -133,8 +198,14 @@ $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'v
                         <?php endif; ?>
 
                         <?php if ($connectedUserType == 'abonne' || $connectedUserType == 'administrateur'): ?>
-                            <button onclick="window.location.href='suivre.php?id=<?php echo htmlspecialchars($profile['id']); ?>'">Suivre</button>
-                            <button onclick="window.location.href='envoyer_message.php?id=<?php echo htmlspecialchars($profile['id']); ?>'">Envoyer un message</button>
+                            <button onclick="window.location.href='message.php?conversation_with=<?php echo htmlspecialchars($profile['id']); ?>'">Envoyer un message</button>
+                            <form method="post" style="display:inline;">
+                                <button type="submit" name="block">Bloquer</button>
+                            </form>
+                        <?php endif; ?>
+
+                        <?php if ($connectedUserId == $profile['id'] || $connectedUserType == 'administrateur'): ?>
+                            <button onclick="window.location.href='modifier_utilisateur.php?id=<?php echo htmlspecialchars($profile['id']); ?>'">Modifier le profil</button>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -164,7 +235,7 @@ $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'v
             </div>
         </div>
         <div class="footerBottom">
-            <p>&copy; 2024 Infinity'love - Tous droits réservés</p>
+            <p>&copy; 2024 Infinity Love - Tous droits réservés</p>
         </div>
     </footer>
 </body>

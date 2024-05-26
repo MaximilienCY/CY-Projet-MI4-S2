@@ -8,7 +8,9 @@ function getUserByEmail($email) {
     $users = [];
     while (!feof($file)) {
         $user = fgets($file);
-        $users[] = $user;
+        if ($user) {
+            $users[] = $user;
+        }
     }
 
     // Fermer le fichier
@@ -17,7 +19,7 @@ function getUserByEmail($email) {
     // Parcourir le tableau des utilisateurs pour trouver l'utilisateur avec l'adresse email donnée
     foreach ($users as $user) {
         $data = explode(",", $user);
-        if ($data[3] === $email) {
+        if (trim($data[3]) === $email) {
             // Retourner l'utilisateur sous forme de tableau associatif
             return [
                 'id' => $data[0],
@@ -44,50 +46,43 @@ function getUserByEmail($email) {
 }
 
 if (isset($_POST['modifier']) && isset($_POST['email'])) {
-    // Récupérer l'utilisateur à modifier
-    $user = getUserByEmail($_POST['email']);
+    session_start();
 
-    if ($user !== null) {
-        // Trouver l'index de l'utilisateur à modifier dans le tableau
-        $file = fopen("utilisateurs.txt", "r");
-        $users = [];
-        $index = -1;
-        while (!feof($file)) {
-            $userData = fgets($file);
-            $data = explode(",", $userData);
-            if ($data[3] === $_POST['email']) {
-                $index = count($users);
+    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+        // Lire toutes les lignes du fichier dans un tableau
+        $lines = file("utilisateurs.txt");
+
+        // Parcourir les lignes pour trouver et mettre à jour l'utilisateur actuel
+        foreach ($lines as &$line) {
+            $data = explode(",", $line);
+            if ($_POST['id'] == trim($data[0])) {
+                // Mettre à jour les données de l'utilisateur avec les valeurs soumises dans le formulaire
+                $data[1] = $_POST['first_name'];
+                $data[2] = $_POST['name'];
+                $data[3] = $_POST['email'];
+                $data[4] = $_POST['password'];
+                $data[5] = $_POST['gender'];
+                $data[6] = $_POST['birthdate'];
+                $data[7] = $_POST['profession'];
+                $data[8] = $_POST['residence'];
+                $data[9] = $_POST['relationship_status'];
+                $data[10] = $_POST['physical_description'];
+                $data[11] = $_POST['personal_info'];
+                $data[12] = $_POST['photo_address'];
+                $data[13] = $_POST['user_type'];
+
+                // Reconstruire la ligne mise à jour
+                $line = implode(",", $data);
+                break;
             }
-            $users[] = $userData;
         }
-        fclose($file);
 
-        // Mettre à jour les informations de l'utilisateur
-        $users[$index] = implode(",", [
-            $user['id'],
-            $_POST['first_name'],
-            $_POST['name'],
-            $_POST['email'],
-            $_POST['password'],
-            $_POST['gender'],
-            $_POST['birthdate'],
-            $_POST['profession'],
-            $_POST['residence'],
-            $_POST['relationship_status'],
-            $_POST['physical_description'],
-            $_POST['personal_info'],
-            $_POST['photo_address'],
-            $_POST['user_type'],
-            $user['ban']
-        ]);
-
-        // Écrire le contenu du tableau dans le fichier
-        $file = fopen("utilisateurs.txt", "w");
-        fwrite($file, implode("", $users));
-        fclose($file);
+        // Réécrire toutes les lignes dans le fichier
+        file_put_contents("utilisateurs.txt", implode("", $lines));
 
         // Rediriger l'utilisateur vers la page d'administration
         header("Location: admin.php");
+        exit;
     } else {
         // Afficher un message d'erreur si l'utilisateur n'est pas trouvé
         echo "Aucun utilisateur avec cet email n'a été trouvé.";

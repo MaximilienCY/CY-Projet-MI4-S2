@@ -1,7 +1,7 @@
 <?php
 function getUsers() {
     $users = [];
-    $filePath = 'utilisateurs.txt';
+    $filePath = '../txt/utilisateurs.txt';
 
     if (($handle = fopen($filePath, "r")) !== false) {
         while (($line = fgets($handle)) !== false) {
@@ -76,7 +76,7 @@ function blockUser($user, $blockedUser) {
 
 function getProfilePhotoUrl($userId) {
     // Chemin vers le fichier utilisateurs.txt
-    $filename = 'utilisateurs.txt';
+    $filename = '../txt/utilisateurs.txt';
     
     // Lire le contenu du fichier ligne par ligne
     $lines = file($filename, FILE_IGNORE_NEW_LINES);

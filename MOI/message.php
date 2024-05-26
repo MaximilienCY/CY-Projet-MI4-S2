@@ -12,9 +12,13 @@ include 'functionsmessagerie.php';
 $users = getUsers();
 $selected_conversation = [];
 $conversation_with = null;
+$conversation_with_name = null;
+$conversation_with_photo = null;
 if (isset($_GET['conversation_with'])) {
     $conversation_with = $_GET['conversation_with'];
     $selected_conversation = getConversation($user_id_session, $conversation_with);
+    $conversation_with_name = getUserNameById($conversation_with);
+    $conversation_with_photo = getUserProfilePhotoById($conversation_with);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -67,6 +71,26 @@ function getConversation($user1, $user2) {
 
     return $conversation;
 }
+
+function getUserNameById($id) {
+    global $users;
+    foreach ($users as $user) {
+        if ($user['id'] == $id) {
+            return $user['pseudo'];
+        }
+    }
+    return null;
+}
+
+function getUserProfilePhotoById($id) {
+    global $users;
+    foreach ($users as $user) {
+        if ($user['id'] == $id) {
+            return $user['photo'];
+        }
+    }
+    return null;
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,10 +126,11 @@ function getConversation($user1, $user2) {
             <?php foreach ($users as $user): ?>
                 <li>
                     <a href="?conversation_with=<?= htmlspecialchars($user['id']) ?>">
-                        <?= htmlspecialchars($user['pseudo']) ?>
-                        <!-- Afficher la photo de profil -->
-                        <div class="profile-photo">
-                            <img src="<?= getProfilePhotoUrl($user['id']) ?>" alt="Photo de profil"class="profile-picture">
+                        <div class="contact">
+                            <div class="profile-photo">
+                                <img src="<?= htmlspecialchars($user['photo']) ?>" alt="Photo de profil" class="profile-picture">
+                            </div>
+                            <div class="contact-name"><?= htmlspecialchars($user['pseudo']) ?></div>
                         </div>
                     </a>
                 </li>
@@ -116,32 +141,32 @@ function getConversation($user1, $user2) {
     <div class="main-content">
         <?php if ($conversation_with): ?>
             <div class="conversation-header">
-                <h2>Conversation avec <?= htmlspecialchars($conversation_with) ?></h2>
+                <div class="profile-photo">
+                    <img src="<?= htmlspecialchars($conversation_with_photo) ?>" alt="Photo de profil" class="profile-picture">
+                </div>
+                <h2>Conversation avec <?= htmlspecialchars($conversation_with_name) ?></h2>
             </div>
             <div class="conversation-messages">
-       <?php foreach ($selected_conversation as $index => $conv_message): ?>
-    <div class="message <?= $conv_message['from'] === $user_id_session ? 'sent' : 'received' ?>">
-        <p><?= nl2br(htmlspecialchars($conv_message['message'])) ?></p>
-        <span class="timestamp"><?= htmlspecialchars($conv_message['timestamp']) ?></span>
-          <?php if ($conv_message['from'] !== $user_id_session): ?>
-            <!-- Formulaire de signalement -->
-            <form method="post" class="report-form">
-                <input type="hidden" name="index" value="<?= $index ?>">
-                <input type="text" name="reason" placeholder="Motif du signalement">
-                <button type="submit" name="report">Signaler</button>
-            </form>
-        <?php endif; ?>
-        <?php if ($conv_message['from'] === $user_id_session): ?>
-            <form method="post" class="delete-form">
-                <input type="hidden" name="index" value="<?= $index ?>">
-                <button type="submit" name="delete">Supprimer</button>
-            </form>
-        <?php endif; ?>
-        
-       
-    </div>
-<?php endforeach; ?>
-
+                <?php foreach ($selected_conversation as $index => $conv_message): ?>
+                    <div class="message <?= $conv_message['from'] === $user_id_session ? 'sent' : 'received' ?>">
+                        <p><?= nl2br(htmlspecialchars($conv_message['message'])) ?></p>
+                        <span class="timestamp"><?= htmlspecialchars($conv_message['timestamp']) ?></span>
+                        <?php if ($conv_message['from'] !== $user_id_session): ?>
+                            <!-- Formulaire de signalement -->
+                            <form method="post" class="report-form">
+                                <input type="hidden" name="index" value="<?= $index ?>">
+                                <input type="text" name="reason" placeholder="Motif du signalement">
+                                <button type="submit" name="report">Signaler</button>
+                            </form>
+                        <?php endif; ?>
+                        <?php if ($conv_message['from'] === $user_id_session): ?>
+                            <form method="post" class="delete-form">
+                                <input type="hidden" name="index" value="<?= $index ?>">
+                                <button type="submit" name="delete">Supprimer</button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
             <div class="send-message-form">
                 <form method="post">
@@ -161,4 +186,3 @@ function getConversation($user1, $user2) {
 
 </body>
 </html>
-

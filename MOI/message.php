@@ -122,7 +122,7 @@ function getUserProfilePhotoById($id) {
     <nav class="navbar">
         <a href="index.php" class="logo">Infinity Love<span>.<span></a>
         <ul class="menu-links">
-            <li><a href="#hero-section">Accueil</a></li> 
+            <li><a href="index.php">Accueil</a></li> 
             <?php
             if ($user_type === 'visiteur'|| $user_type === 'utilisateur') {
                 echo '<li><a href="#features">Offres</a></li>';

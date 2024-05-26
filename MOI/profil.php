@@ -158,7 +158,7 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
                 }
 
                 if (isset($_SESSION['droits_utilisateur']) && in_array('envoyer_messages', $_SESSION['droits_utilisateur'])) {
-                    echo '<li><a href="messages.php">Messages</a></li>';
+                    echo '<li><a href="message.php">Messages</a></li>';
                 }
                 if (isset($_SESSION['droits_utilisateur']) && in_array('gerer_utilisateurs', $_SESSION['droits_utilisateur'])) {
                     echo '<li><a href="admin.php">Administration</a></li>';

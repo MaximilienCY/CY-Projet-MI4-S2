@@ -107,7 +107,6 @@ header .navbar {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-
   overflow-y: auto;
 }
 
@@ -150,7 +149,7 @@ header .navbar {
 
 .profile-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25%, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2%;
   width: 100%;
   margin: 0 auto;
@@ -160,7 +159,7 @@ header .navbar {
   border: 1px solid #ccc;
   border-radius: 10px;
   background-color: white;
-  padding: 2%;
+  padding: 1%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -173,18 +172,34 @@ header .navbar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.profile-card img {
+.profile-image-container {
   width: 100%;
-  border-radius: 50%;
-  margin-bottom: 2%;
+  height: 300px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: 1px solid #ccc;
 }
 
 .profile-details {
   text-align: center;
+  padding: 10px;
+  flex-grow: 1;
 }
 
 .profile-details h3 {
-  margin: 0 0 2% 0;
+  margin: 10px 0;
+}
+
+.profile-details p {
+  margin: 5px 0;
 }
 
 .search-bar {
@@ -220,6 +235,7 @@ header .navbar {
 .search-bar button:hover {
   background-color: #0056b3;
 }
+
 footer{
   background-color: #111;
 }

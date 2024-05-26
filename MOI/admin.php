@@ -136,14 +136,16 @@ function getUsers(){
         </div>
     </div>
 </header>
+
 <style>
     header {
         background-color: black;
         position: relative;
     }
 </style>
-
+<div class="title">
 <h1>Liste des utilisateurs</h1>
+</div>
 <table>
     <thead>
     <tr>

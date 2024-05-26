@@ -7,6 +7,7 @@ if (!isset($_SESSION['user_type'])) {
 }
 
 $user_type = $_SESSION['user_type'];
+$user_id_session = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
 // Définir les droits pour chaque type d'utilisateur
 $droits = [
@@ -109,25 +110,27 @@ $droits_utilisateur = $droits[$user_type];
 
                                 if (count($recentProfiles) > 0) {
                                     foreach ($recentProfiles as $user) {
-                                        echo "<li role='listitem' class='gallery-item grid-item'>";
-                                        echo "<a href='profil.php?id=" . urlencode($user['id']) . "' class='feature-card-link'>";
-                                        echo "<div class='feature-card card-container'>";
-                                        echo "<figure class='feature-card-image-container'>";
-                                        echo "<img src='" . htmlspecialchars($user['photo']) . "' alt='Photo de " . htmlspecialchars($user['prenom']) . "' class='feature-card-image'>";
-                                        echo "</figure>";
-                                        echo "<div class='card-modifier card-padding theme-dark fixed-width'>";
-                                        echo "<div class='card-viewport-content'>";
-                                        echo "<div class='feature-card-content'>";
-                                        echo "<div class='feature-card-copy'>";
-                                        echo "<p class='typography-feature-card-label feature-card-label'>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</p>";
-                                        echo "<p class='typography-card-headline feature-card-headline'>Date de naissance:<br> " . htmlspecialchars($user['date_creation']) . "<br>Ville: " . htmlspecialchars($user['ville']) . "<br>Statut: " . htmlspecialchars($user['statut']) . "</p>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</div>";
-                                        echo "</a>";
-                                        echo "</li>";
+                                        if ($user['id'] != $user_id_session) {
+                                            echo "<li role='listitem' class='gallery-item grid-item'>";
+                                            echo "<a href='profil.php?id=" . urlencode($user['id']) . "' class='feature-card-link'>";
+                                            echo "<div class='feature-card card-container'>";
+                                            echo "<figure class='feature-card-image-container'>";
+                                            echo "<img src='" . htmlspecialchars($user['photo']) . "' alt='Photo de " . htmlspecialchars($user['prenom']) . "' class='feature-card-image'>";
+                                            echo "</figure>";
+                                            echo "<div class='card-modifier card-padding theme-dark fixed-width'>";
+                                            echo "<div class='card-viewport-content'>";
+                                            echo "<div class='feature-card-content'>";
+                                            echo "<div class='feature-card-copy'>";
+                                            echo "<p class='typography-feature-card-label feature-card-label'>" . htmlspecialchars($user['nom']) . " " . htmlspecialchars($user['prenom']) . "</p>";
+                                            echo "<p class='typography-card-headline feature-card-headline'>Date de naissance:<br> " . htmlspecialchars($user['date_creation']) . "<br>Ville: " . htmlspecialchars($user['ville']) . "<br>Statut: " . htmlspecialchars($user['statut']) . "</p>";
+                                            echo "</div>";
+                                            echo "</div>";
+                                            echo "</div>";
+                                            echo "</div>";
+                                            echo "</div>";
+                                            echo "</a>";
+                                            echo "</li>";
+                                        }
                                     }
                                 } else {
                                     echo "<p>Aucun utilisateur trouvé</p>";
@@ -182,7 +185,12 @@ $droits_utilisateur = $droits[$user_type];
                     <div>❌ Like et amitié</div>
                 </div>
                 <div class="button">
-                    <button onclick="window.location.href='inscription.php'">Découvrir</button>
+                <?php if ($user_type === 'visiteur') : ?> 
+                <button onclick="window.location.href='inscription.php'">Découvrir</button>
+                <?php endif; ?>
+                <?php if ($user_type === 'utilisateur') : ?> 
+                    <button onclick="window.location.href='index.php'">Découvrir</button>
+                <?php endif; ?>
                 </div>
         </div>
         <div class="box pro">
@@ -236,7 +244,7 @@ $droits_utilisateur = $droits[$user_type];
             <a href=""><i class="fa-brands fa-youtube"></i></a>
         </div>
         <div class="footerNav">
-            <ul><li><a href="#hero-section">Accueuil</a></li>
+            <ul><li><a href="#hero-section">Accueil</a></li>
                 <li><a href="">A propos</a></li>
                 <li><a href="">Nous contacter</a></li>
                 <li><a href="">Notre équipe</a></li>

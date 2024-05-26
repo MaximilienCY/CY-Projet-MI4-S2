@@ -69,7 +69,7 @@ background: #fff;
 
 .hero-section {
   height: 100vh;
-  background-image: url("uploads/output.jpg");
+  background-image: url("../MOI/uploads/output.jpg");
   background-position: center;
   background-size: cover;
   display: flex;

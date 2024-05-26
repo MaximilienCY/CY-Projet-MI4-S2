@@ -117,126 +117,144 @@
             </div>
 
             <?php
+		function calculateAge($birthdate) {
+		    $birthdate = new DateTime($birthdate);
+		    $today = new DateTime();
+		    $age = $today->diff($birthdate)->y;
+		    return $age;
+		}
 
-            function calculateAge($birthdate) {
-                $birthdate = new DateTime($birthdate);
-                $today = new DateTime();
-                $age = $today->diff($birthdate)->y;
-                return $age;
-            }
+		function isUserBlocked($user_id_session, $user_id) {
+		    $filename = 'blocked_users.txt';
+		    if (!file_exists($filename)) {
+		        return false;
+		    }
+		    $file = fopen($filename, 'r');
+		    if ($file) {
+		        while (($line = fgets($file)) !== false) {
+		            $data = explode(',', trim($line));
+		            if (count($data) == 2 && $data[0] == $user_id_session && $data[1] == $user_id) {
+		                fclose($file);
+		                return true;
+		            }
+		        }
+		        fclose($file);
+		    }
+		    return false;
+		}
 
-            if (isset($_GET['query']) || isset($_GET['gender']) || isset($_GET['relationship_status']) || isset($_GET['residence']) || isset($_GET['profession']) || isset($_GET['age_min']) || isset($_GET['age_max']) || isset($_GET['physical_description']) || isset($_GET['personal_info'])) {
-                $query = strtolower(trim($_GET['query']));
-                $gender = strtolower(trim($_GET['gender']));
-                $relationship_status = strtolower(trim($_GET['relationship_status']));
-                $residence = strtolower(trim($_GET['residence']));
-                $profession = strtolower(trim($_GET['profession']));
-                $age_min = trim($_GET['age_min']);
-                $age_max = trim($_GET['age_max']);
-                $physical_description = strtolower(trim($_GET['physical_description']));
-                $personal_info = strtolower(trim($_GET['personal_info']));
-                $filename = 'utilisateurs.txt';
+		if (isset($_GET['query']) || isset($_GET['gender']) || isset($_GET['relationship_status']) || isset($_GET['residence']) || isset($_GET['profession']) || isset($_GET['age_min']) || isset($_GET['age_max']) || isset($_GET['physical_description']) || isset($_GET['personal_info'])) {
+		    $query = strtolower(trim($_GET['query']));
+		    $gender = strtolower(trim($_GET['gender']));
+		    $relationship_status = strtolower(trim($_GET['relationship_status']));
+		    $residence = strtolower(trim($_GET['residence']));
+		    $profession = strtolower(trim($_GET['profession']));
+		    $age_min = trim($_GET['age_min']);
+		    $age_max = trim($_GET['age_max']);
+		    $physical_description = strtolower(trim($_GET['physical_description']));
+		    $personal_info = strtolower(trim($_GET['personal_info']));
+		    $filename = 'utilisateurs.txt';
 
-                if (file_exists($filename)) {
-                    $file = fopen($filename, 'r');
-                    if ($file) {
-                        $profilesFound = false; // Variable to track if any profiles are found
-                        echo '<h2>Résultats de la recherche :</h2>';
-                        echo '<div class="profile-container">';
+		    if (file_exists($filename)) {
+			$file = fopen($filename, 'r');
+			if ($file) {
+			    $profilesFound = false; // Variable to track if any profiles are found
+			    echo '<h2>Résultats de la recherche :</h2>';
+			    echo '<div class="profile-container">';
 
-                        while (($line = fgets($file)) !== false) {
-                            $data = explode(',', $line);
-                            $user_id = $data[0];
-                            $first_name = $data[1];
-                            $last_name = $data[2];
-                            $email = $data[3];
-                            $password = $data[4];
-                            $gender_user = strtolower($data[5]);
-                            $birthdate = $data[6];
-                            $profession_user = strtolower($data[7]);
-                            $residence_user = strtolower($data[8]);
-                            $relationship_status_user = strtolower($data[9]);
-                            $physical_description_user = strtolower($data[10]);
-                            $personal_info_user = strtolower($data[11]);
-                            $photo_address = $data[12];
-                            $user_type = $data[13];
-                            $ban = $data[14];
+			    while (($line = fgets($file)) !== false) {
+				$data = explode(',', $line);
+				$user_id = $data[0];
+				$first_name = $data[1];
+				$last_name = $data[2];
+				$email = $data[3];
+				$password = $data[4];
+				$gender_user = strtolower($data[5]);
+				$birthdate = $data[6];
+				$profession_user = strtolower($data[7]);
+				$residence_user = strtolower($data[8]);
+				$relationship_status_user = strtolower($data[9]);
+				$physical_description_user = strtolower($data[10]);
+				$personal_info_user = strtolower($data[11]);
+				$photo_address = $data[12];
+				$user_type = $data[13];
+				$ban = $data[14];
 
-                            $age_user = calculateAge($birthdate);
+				$age_user = calculateAge($birthdate);
 
-                            // Combine user details into a single string for easy searching
-                            $user_data = strtolower($first_name . ' ' . $last_name . ' ' . $email . ' ' . $profession_user . ' ' . $residence_user . ' ' . $physical_description_user . ' ' . $personal_info_user);
+				// Combine user details into a single string for easy searching
+				$user_data = strtolower($first_name . ' ' . $last_name . ' ' . $email . ' ' . $profession_user . ' ' . $residence_user . ' ' . $physical_description_user . ' ' . $personal_info_user);
 
-                            // Check if the query matches any part of the user data
-                            $match = true;
+				// Check if the query matches any part of the user data
+				$match = true;
 
-                            if ($query && strpos($user_data, $query) === false) {
-                                $match = false;
-                            }
-                            if ($gender && $gender_user != $gender) {
-                                $match = false;
-                            }
-                            if ($relationship_status && $relationship_status_user != $relationship_status) {
-                                $match = false;
-                            }
-                            if ($residence && strpos($residence_user, $residence) === false) {
-                                $match = false;
-                            }
-                            if ($profession && strpos($profession_user, $profession) === false) {
-                                $match = false;
-                            }
-                            if (($age_min && $age_user < $age_min) || ($age_max && $age_user > $age_max)) {
-                                $match = false;
-                            }
-                            if ($physical_description && strpos($physical_description_user, $physical_description) === false) {
-                                $match = false;
-                            }
-                            if ($personal_info && strpos($personal_info_user, $personal_info) === false) {
-                                $match = false;
-                            }
+				if ($query && strpos($user_data, $query) === false) {
+				    $match = false;
+				}
+				if ($gender && $gender_user != $gender) {
+				    $match = false;
+				}
+				if ($relationship_status && $relationship_status_user != $relationship_status) {
+				    $match = false;
+				}
+				if ($residence && strpos($residence_user, $residence) === false) {
+				    $match = false;
+				}
+				if ($profession && strpos($profession_user, $profession) === false) {
+				    $match = false;
+				}
+				if (($age_min && $age_user < $age_min) || ($age_max && $age_user > $age_max)) {
+				    $match = false;
+				}
+				if ($physical_description && strpos($physical_description_user, $physical_description) === false) {
+				    $match = false;
+				}
+				if ($personal_info && strpos($personal_info_user, $personal_info) === false) {
+				    $match = false;
+				}
 
-                            // Exclude banned users
-                            if ($ban == 'oui') {
-                                $match = false;
-                            }
+				// Exclude banned users
+				if ($ban == 'oui') {
+				    $match = false;
+				}
 
-                            // Exclude the connected user's profile
-                            if ($user_id_session && $user_id == $user_id_session) {
-                                $match = false;
-                            }
+				// Exclude the connected user's profile and blocked users
+				if (($user_id_session && $user_id == $user_id_session) || isUserBlocked($user_id_session, $user_id)) {
+				    $match = false;
+				}
 
-                            if ($match) {
-                                $profilesFound = true; // A profile is found
-                                echo '<div class="profile-card" onclick="location.href=\'profil.php?id=' . htmlspecialchars($user_id) . '\'">';
-                                echo '<img src="' . htmlspecialchars($photo_address) . '" alt="Photo de ' . htmlspecialchars($first_name) . '">';
-                                echo '<div class="profile-details">';
-                                echo '<h3>' . htmlspecialchars($first_name) . ' ' . htmlspecialchars($last_name) . '</h3>';
-                                echo '<p>Email: ' . htmlspecialchars($email) . '</p>';
-                                echo '<p>Profession: ' . htmlspecialchars($profession_user) . '</p>';
-                                echo '<p>Residence: ' . htmlspecialchars($residence_user) . '</p>';
-                                echo '<p>Statut relationnel: ' . htmlspecialchars($relationship_status_user) . '</p>';
-                                echo '<p>Description physique: ' . htmlspecialchars($physical_description_user) . '</p>';
-                                echo '<p>Informations personnelles: ' . htmlspecialchars($personal_info_user) . '</p>';
-                                echo '</div>';
-                                echo '</div>';
-                            }
-                        }
+				if ($match) {
+				    $profilesFound = true; // A profile is found
+				    echo '<div class="profile-card" onclick="location.href=\'profil.php?id=' . htmlspecialchars($user_id) . '\'">';
+				    echo '<div class="profile-image-container">';
+				    echo '<img src="' . htmlspecialchars($photo_address) . '" alt="Photo de ' . htmlspecialchars($first_name) . '">';
+				    echo '</div>';
+				    echo '<div class="profile-details">';
+				    echo '<h3>' . htmlspecialchars($first_name) . ' ' . htmlspecialchars($last_name) . '</h3>';
+				    echo '<p>Âge: ' . $age_user . ' ans</p>';
+				    echo '<p>Profession: ' . htmlspecialchars($profession_user) . '</p>';
+				    echo '<p>Résidence: ' . htmlspecialchars($residence_user) . '</p>';
+				    echo '<p>Statut relationnel: ' . htmlspecialchars($relationship_status_user) . '</p>';
+				    echo '</div>';
+				    echo '</div>';
+				}
+			    }
 
-                        if (!$profilesFound) {
-                            // No profiles found
-                            echo '<p>Aucun profil trouvé.</p>';
-                        }
+			    if (!$profilesFound) {
+				// No profiles found
+				echo '<p>Aucun profil trouvé.</p>';
+			    }
 
-                        echo '</div>';
-                        fclose($file);
-                    } else {
-                        echo '<p>Impossible d\'ouvrir le fichier des utilisateurs.</p>';
-                    }
-                } else {
-                    echo '<p>Le fichier des utilisateurs n\'existe pas.</p>';
-                }
-            }
-            ?>
+			    echo '</div>';
+			    fclose($file);
+			} else {
+			    echo '<p>Impossible d\'ouvrir le fichier des utilisateurs.</p>';
+			}
+		    } else {
+			echo '<p>Le fichier des utilisateurs n\'existe pas.</p>';
+		    }
+		}
+		?>
 
         </div>
     </div>

@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['upgrade_to_abonne'])) 
 <body>
 <header>
     <nav class="navbar">
-        <a href="#" class="logo">Infinity Love<span>.<span></a>
+        <a href="index.php" class="logo">Infinity Love<span>.<span></a>
         <ul class="menu-links">
             <li><a href="index.php">Accueil</a></li> 
             <?php

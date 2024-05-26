@@ -184,7 +184,7 @@ $droits_utilisateur = $droits[$user_type];
 		    $age_max = trim($_GET['age_max']);
 		    $physical_description = strtolower(trim($_GET['physical_description']));
 		    $personal_info = strtolower(trim($_GET['personal_info']));
-		    $filename = 'utilisateurs.txt';
+		    $filename = '../txt/utilisateurs.txt';
 
 		    if (file_exists($filename)) {
 			$file = fopen($filename, 'r');

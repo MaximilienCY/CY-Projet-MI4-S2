@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Lecture du fichier utilisateurs.txt
-    $file = fopen("utilisateurs.txt", "r");
+    $file = fopen("../txt/utilisateurs.txt", "r");
 
     // Boucle pour rechercher l'utilisateur dans le fichier
     while (!feof($file)) {
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles/styles.css">
     <title>Connexion</title>
 </head>
 <body>

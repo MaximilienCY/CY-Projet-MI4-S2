@@ -1,134 +1,65 @@
 <?php
 session_start();
 
-// Inclure le fichier contenant les fonctions
-require_once 'fonctions.php';
-
-// Vérifier si un ID de profil a été passé en paramètre
-if (isset($_GET['id'])) {
-    $profileId = $_GET['id'];
-
-    // Utiliser la fonction pour obtenir les détails du profil correspondant
-    $filePath = "utilisateurs.txt";
-    $profile = getProfileById($filePath, $profileId);
-} else {
-    $profile = null;
+// Initialiser la session de base pour les visiteurs
+if (!isset($_SESSION['user_type'])) {
+    $_SESSION['user_type'] = 'visiteur';
 }
 
-// Fonction pour obtenir le profil par ID
-function getProfileById($filePath, $id) {
-    $file = fopen($filePath, "r");
-    if ($file) {
-        while (($line = fgets($file)) !== false) {
-            $data = explode(",", trim($line));
-            if ($data[0] == $id) {
-                fclose($file);
-                return [
-                    'id' => htmlspecialchars($data[0]),
-                    'prenom' => htmlspecialchars($data[1]),
-                    'nom' => htmlspecialchars($data[2]),
-                    'email' => htmlspecialchars($data[3]),
-                    'mot_de_passe' => htmlspecialchars($data[4]),
-                    'sexe' => htmlspecialchars($data[5]),
-                    'date_naissance' => htmlspecialchars($data[6]), // date de naissance
-                    'profession' => htmlspecialchars($data[7]),
-                    'ville' => htmlspecialchars($data[8]),
-                    'statut' => htmlspecialchars($data[9]),
-                    'description_physique' => htmlspecialchars($data[10]),
-                    'infos_personnelles' => htmlspecialchars($data[11]),
-                    'photo' => htmlspecialchars($data[12]),
-                    'type_utilisateur' => htmlspecialchars($data[13])
-                ];
-            }
-        }
-        fclose($file);
-    }
-    return null;
+$user_type = $_SESSION['user_type'];
+
+// Définir les droits pour chaque type d'utilisateur
+$droits = [
+    'visiteur' => ['voir_profil_public'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs'],
+    'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
+    'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
+];
+
+$droits_utilisateur = $droits[$user_type];
+?>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Génération de l'identifiant utilisateur unique
+    $user_id = "user_" . uniqid();
+    $user_type = "utilisateur";
+
+    $first_name = $_POST['first_name'];
+    $name = $_POST['name'];
+    $mail = $_POST['email'];
+    $password = $_POST['password'];
+    $gender = $_POST['gender'];
+    $birthdate = $_POST['birthdate'];
+    $profession = $_POST['profession'];
+    $residence = $_POST['residence'];
+    $relationship_status = $_POST['relationship_status'];
+    $physical_description = $_POST['physical_description'];
+    $personal_info = $_POST['personal_info'];
+    $ban= 'non'; //Utilisateur banni ou non (Initialement non)
+
+    // Traitement de l'image
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["photo"]["name"]);
+    move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file);
+    $photo_address = $target_file;
+
+    // Formatage des données pour le stockage dans le fichier
+    $data = $user_id . "," . $first_name . "," . $name . "," . $mail . "," . $password . "," . $gender . "," . $birthdate . "," . $profession . "," . $residence . "," . $relationship_status . "," . $physical_description . "," . $personal_info . "," . $photo_address . "," . $user_type . "," . $ban ."\n";
+
+    // Ouverture du fichier en mode append
+    $file = fopen("utilisateurs.txt", "a");
+
+    // Écriture des données dans le fichier
+    fwrite($file, $data);
+
+    // Fermeture du fichier
+    fclose($file);
+
+    // Redirection vers la page de connexion après l'inscription
+    header("Location: connexion.php");
+    exit();
 }
-
-// Fonction pour calculer l'âge à partir de la date de naissance
-function calculerAge($dateNaissance) {
-    $aujourdhui = new DateTime();
-    $naissance = new DateTime($dateNaissance);
-    $age = $aujourdhui->diff($naissance)->y;
-    return $age;
-}
-
-// Fonction pour vérifier si un utilisateur est bloqué
-function isUserBlocked($userId, $blockedUserId) {
-    $filePath = 'blocked_users.txt';
-    $file = fopen($filePath, "r");
-    if ($file) {
-        while (($line = fgets($file)) !== false) {
-            list($blocker, $blocked) = explode(",", trim($line));
-            if ($blocker == $userId && $blocked == $blockedUserId) {
-                fclose($file);
-                return true;
-            }
-        }
-        fclose($file);
-    }
-    return false;
-}
-
-// Fonction pour bloquer un utilisateur
-function blockUser($userId, $blockedUserId) {
-    $filePath = 'blocked_users.txt';
-    $file = fopen($filePath, "a");
-    if ($file) {
-        fwrite($file, "$userId,$blockedUserId\n");
-        fclose($file);
-    }
-}
-
-// Fonction pour débloquer un utilisateur
-function unblockUser($userId, $blockedUserId) {
-    $filePath = 'blocked_users.txt';
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES);
-    $newLines = [];
-    foreach ($lines as $line) {
-        list($blocker, $blocked) = explode(",", trim($line));
-        if ($blocker != $userId || $blocked != $blockedUserId) {
-            $newLines[] = $line;
-        }
-    }
-    file_put_contents($filePath, implode("\n", $newLines) . "\n");
-}
-
-// Fonction pour signaler un utilisateur
-function reportUser($reporterId, $reportedId, $reason) {
-    $filePath = 'signalement.txt';
-    $file = fopen($filePath, "a");
-    if ($file) {
-        fwrite($file, "$reporterId,$reportedId,$reason\n");
-        fclose($file);
-    }
-}
-
-// Vérifier le type d'utilisateur connecté
-$connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'visiteur';
-$connectedUserId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
-
-// Rediriger les visiteurs vers la page d'accueil
-if ($connectedUserType == 'visiteur') {
-    header("Location: index.php");
-    exit;
-}
-
-// Gérer le blocage, le déblocage et le signalement des utilisateurs
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['block'])) {
-        blockUser($connectedUserId, $profileId);
-    } elseif (isset($_POST['unblock'])) {
-        unblockUser($connectedUserId, $profileId);
-    } elseif (isset($_POST['report'])) {
-        $reason = isset($_POST['reason']) ? htmlspecialchars($_POST['reason']) : '';
-        reportUser($connectedUserId, $profileId, $reason);
-    }
-}
-
-// Vérifier si l'utilisateur est bloqué
-$isBlocked = isUserBlocked($connectedUserId, $profileId);
 ?>
 
 <!DOCTYPE html>
@@ -136,123 +67,152 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Utilisateur</title>
-    <link rel="stylesheet" href="profil.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="inscription.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Inscription</title>
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <a href="#" class="logo">Infinity Love<span>.<span></a>
-            <ul class="menu-links">
-                <li><a href="index.php">Accueil</a></li>
-                <li><a href="recherche.php">Recherche</a></li>
-                <?php
-                // Vérifiez si l'utilisateur est connecté
-                if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
-                    echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
-                    echo '<li><a href="mon_profil.php">Mon profil</a></li>';
-                } else {
-                    echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
-                    echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
-                }
+<header>
+        
+    	<nav class="navbar">
+  	        <a href="#" class="logo">Infinity Love<span>.<span></a>
+                <ul class="menu-links">
+                    <li><a href="index.php">Accueil</a></li> 
+                    <li><a href="index.php">Offres</a></li>
+                    
+                    <?php
+                    // Vérifiez si l'utilisateur est connecté
+                    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+                        echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
+                        echo '<li><a href="mon_profil.php">Mon profil</a></li>';
+                    } else {
+                        echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
+                        echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
+                    }
 
-                if (isset($_SESSION['droits_utilisateur']) && in_array('envoyer_messages', $_SESSION['droits_utilisateur'])) {
-                    echo '<li><a href="message.php">Messages</a></li>';
-                }
-                if (isset($_SESSION['droits_utilisateur']) && in_array('gerer_utilisateurs', $_SESSION['droits_utilisateur'])) {
-                    echo '<li><a href="admin.php">Administration</a></li>';
-                }
+                    if (in_array('envoyer_messages', $droits_utilisateur)) {
+                        echo '<li><a href="messages.php">Messages</a></li>';
+                    }
+                    if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
+                        echo '<li><a href="admin.php">Administration</a></li>';
+                    }
 
-                // Si l'action de déconnexion est demandée
-                if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-                    // Détruisez toutes les variables de session
-                    $_SESSION = array();
+                    // Si l'action de déconnexion est demandée
+                    if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+                        // Détruisez toutes les variables de session
+                        $_SESSION = array();
 
-                    // Détruisez la session
-                    session_destroy();
+                        // Détruisez la session
+                        session_destroy();
 
-                    // Redirigez l'utilisateur vers la page d'accueil après la déconnexion
-                    header("Location: index.php");
-                    exit;
-                }
-                ?>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="container">
-            <?php if ($isBlocked): ?>
-                <p>Vous avez bloqué cet utilisateur.</p>
-                <form method="post">
-                    <button type="submit" name="unblock">Débloquer</button>
-                </form>
-            <?php elseif ($profile): ?>
-                <div class="profile-card">
-                    <figure class="profile-card-image-container">
-                        <img src="<?php echo htmlspecialchars($profile['photo']); ?>" alt="Photo de <?php echo htmlspecialchars($profile['prenom']); ?>" class="profile-card-image">
-                    </figure>
-                    <div class="profile-card-content">
-                        <h2><?php echo htmlspecialchars($profile['prenom']) . " " . htmlspecialchars($profile['nom']); ?></h2>
-                        <p>Sexe: <?php echo htmlspecialchars($profile['sexe']); ?></p>
-                        <p>Âge: <?php echo calculerAge($profile['date_naissance']); ?> ans</p>
-                        <p>Profession: <?php echo htmlspecialchars($profile['profession']); ?></p>
-                        <p>Ville: <?php echo htmlspecialchars($profile['ville']); ?></p>
-                        <p>Statut: <?php echo htmlspecialchars($profile['statut']); ?></p>
-                        
-                        <?php if ($connectedUserType == 'administrateur'): ?>
-                            <p>Email: <?php echo htmlspecialchars($profile['email']); ?></p>
-                            <p>Date de naissance: <?php echo htmlspecialchars($profile['date_naissance']); ?></p>
-                            <p>Description physique: <?php echo htmlspecialchars($profile['description_physique']); ?></p>
-                            <p>Informations personnelles: <?php echo htmlspecialchars($profile['infos_personnelles']); ?></p>
-                            <p>Type d'utilisateur: <?php echo htmlspecialchars($profile['type_utilisateur']); ?></p>
-                        <?php endif; ?>
-
-                        <?php if ($connectedUserType == 'abonne' || $connectedUserType == 'administrateur'): ?>
-                            <button onclick="window.location.href='message.php?conversation_with=<?php echo htmlspecialchars($profile['id']); ?>'">Envoyer un message</button>
-                            <form method="post" style="display:inline;">
-                                <button type="submit" name="block">Bloquer</button>
-                            </form>
-                            <form method="post" style="display:inline;">
-                                <input type="text" name="reason" placeholder="Motif du signalement" required>
-                                <button type="submit" name="report">Signaler</button>
-                            </form>
-                        <?php endif; ?>
-
-                        <?php if ($connectedUserType == 'administrateur'): ?>
-                            <button onclick="window.location.href='modifier_utilisateur.php?id=<?php echo htmlspecialchars($profile['id']); ?>'">Modifier le profil</button>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            <?php else: ?>
-                <p>Profil non trouvé.</p>
-            <?php endif; ?>
-        </div>
-    </main>
-
-    <footer>
-        <div class="footerContainer">
-            <div class="socialIcons">
-                <a href=""><i class="fa-brands fa-facebook"></i></a>
-                <a href=""><i class="fa-brands fa-instagram"></i></a>
-                <a href=""><i class="fa-brands fa-twitter"></i></a>
-                <a href=""><i class="fa-brands fa-google-plus"></i></a>
-                <a href=""><i class="fa-brands fa-youtube"></i></a>
-            </div>
-            <div class="footerNav">
-                <ul>
-                    <li><a href="index.php">Accueil</a></li>
-                    <li><a href="#">A propos</a></li>
-                    <li><a href="#">Nous contacter</a></li>
-                    <li><a href="#">Notre équipe</a></li>
-                    <li><a href="#">Foire aux questions</a></li>
+                        // Redirigez l'utilisateur vers la page d'accueil après la déconnexion
+                        header("Location: index.php");
+                        exit;
+                    }
+                    ?>
                 </ul>
-            </div>
+            </nav>
+    </header>
+    <?php if ($user_type === 'visiteur') : ?>
+    <section class="hero-section" id="hero-section">
+    <div class="content">
+    <div class="container">
+        <div class="box form-box">
+            <h1>S'inscrire</h1>
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="field input">
+                    <label for="first_name">Prénom</label>
+                    <input type="text" name="first_name" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="name">Nom</label>
+                    <input type="text" name="name" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" autocomplete="off" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"><br>
+                </div>
+                <div class="field input">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" name="password" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="gender">Sexe</label>
+                    <select name="gender" required>
+                        <option value="">Choisissez...</option>
+                        <option value="femme">Femme</option>
+                        <option value="homme">Homme</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="field input">
+                    <label for="birthdate">Date de naissance</label>
+                    <input type="date" name="birthdate" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="profession">Profession</label>
+                    <input type="text" name="profession" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="residence">Lieu de résidence</label>
+                    <input type="text" name="residence" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="relationship_status">Relations amoureuses et familiales</label>
+                    <input type="text" name="relationship_status" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="physical_description">Description physique</label>
+                    <input type="text" name="physical_description" autocomplete="off" required><br>
+                </div>
+                <div class="field input">
+                    <label for="personal_info">Informations personnelles</label>
+                    <textarea name="personal_info"></textarea><br>
+                </div>
+                <div class="field input">
+                    <label for="photo">Photo</label>
+                    <input type="file" name="photo" accept="image/*"><br>
+                </div>
+                <div class="field">
+                    <input type="submit" class="btn" name="submit" value="S'inscrire" required>
+                </div>
+                <div class="links">
+                    Déjà inscrit ? <a href="connexion.php">Se connecter</a>
+                </div>
+            </form>
         </div>
-        <div class="footerBottom">
-            <p>&copy; 2024 Infinity Love - Tous droits réservés</p>
+        <div>
+    </div>
+    </section>
+    <?php endif; ?>
+    <footer>
+    <div class="footerContainer">
+        <div class="socialIcons">
+            <a href=""><i class="fa-brands fa-facebook"></i></a>
+            <a href=""><i class="fa-brands fa-instagram"></i></a>
+            <a href=""><i class="fa-brands fa-twitter"></i></a>
+            <a href=""><i class="fa-brands fa-google-plus"></i></a>
+            <a href=""><i class="fa-brands fa-youtube"></i></a>
         </div>
-    </footer>
+        <div class="footerNav">
+            <ul><li><a href="#hero-section">Accueuil</a></li>
+                <li><a href="">A propos</a></li>
+                <li><a href="">Nous contacter</a></li>
+                <li><a href="">Notre équipe</a></li>
+                <li><a href="">Foire aux questions</a></li>
+            </ul>
+        </div>
+        
+    </div>
+    <div class="footerBottom">
+    <p>&copy; 2024 Infinity'love - Tous droits réservés</p>
+    </div>
+</footer>
+</body>
+</html>
+
+    </div>
+</footer>
 </body>
 </html>

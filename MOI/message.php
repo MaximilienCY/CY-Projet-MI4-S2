@@ -7,8 +7,6 @@ if (!$user_id_session) {
     exit;
 }
 
-session_start();
-
 // Initialiser la session de base pour les visiteurs
 if (!isset($_SESSION['user_type'])) {
     $_SESSION['user_type'] = 'visiteur';
@@ -120,55 +118,42 @@ function getUserProfilePhotoById($id) {
 </head>
 <body>
 <header>
-    	<nav class="navbar">
-  	        <a href="#" class="logo">Infinity Love<span>.<span></a>
-                <ul class="menu-links">
-                    <li><a href="#hero-section">Accueil</a></li> 
-                    <?php
-                    if ($user_type === 'visiteur'|| $user_type === 'utilisateur') {
-                        echo '<li><a href="#features">Offres</a></li>';
-                    }
-                    // Vérifiez si l'utilisateur est connecté
-                    if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
-                        echo '<li><a href="mon_profil.php">Mon profil</a></li>';
-                    } else {
-                        echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
-                        echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
-                    }
-
-                    if (in_array('envoyer_messages', $droits_utilisateur)) {
-                        echo '<li><a href="message.php">Messages</a></li>';
-                    }
-                    if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
-                        echo '<li><a href="admin.php">Administration</a></li>';
-                    }
-
-                    if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
-                        echo '<li><a href="recherche.php">Recherche</a></li> ';
-                    }
-                    
-                    if ($user_type !== 'visiteur'){
-                  
-                        echo '<li><a href="index.php?action=logout" class="btn-logout">Déconnexion</a></li>';
-                       
-                    }
-                    
-                    // Si l'action de déconnexion est demandée
-                    if (isset($_GET['action']) && $_GET['action'] === 'logout') {
-                        // Détruisez toutes les variables de session
-                        $_SESSION = array();
-
-                        // Détruisez la session
-                        session_destroy();
-
-                        // Redirigez l'utilisateur vers la page d'accueil après la déconnexion
-                        header("Location: index.php");
-                        exit;
-                    }
-                    ?>
-                </ul>
-            </nav>
-    </header>
+    <nav class="navbar">
+        <a href="#" class="logo">Infinity Love<span>.<span></a>
+        <ul class="menu-links">
+            <li><a href="#hero-section">Accueil</a></li> 
+            <?php
+            if ($user_type === 'visiteur'|| $user_type === 'utilisateur') {
+                echo '<li><a href="#features">Offres</a></li>';
+            }
+            if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
+                echo '<li><a href="mon_profil.php">Mon profil</a></li>';
+            } else {
+                echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
+                echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
+            }
+            if (in_array('envoyer_messages', $droits_utilisateur)) {
+                echo '<li><a href="message.php">Messages</a></li>';
+            }
+            if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
+                echo '<li><a href="admin.php">Administration</a></li>';
+            }
+            if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
+                echo '<li><a href="recherche.php">Recherche</a></li> ';
+            }
+            if ($user_type !== 'visiteur'){
+                echo '<li><a href="index.php?action=logout" class="btn-logout">Déconnexion</a></li>';
+            }
+            if (isset($_GET['action']) && $_GET['action'] === 'logout') {
+                $_SESSION = array();
+                session_destroy();
+                header("Location: index.php");
+                exit;
+            }
+            ?>
+        </ul>
+    </nav>
+</header>
 <div class="container">
     <div class="sidebar">
         <h2>Profils</h2>
@@ -183,7 +168,7 @@ function getUserProfilePhotoById($id) {
                             <div class="contact-name"><?= htmlspecialchars($user['pseudo']) ?></div>
                         </div>
                     </a>
-                    <button onclick="window.location.href='profil.php?id=<?= htmlspecialchars($user['id']) ?>'">Profil</button>
+                    <button class="btn-profile" onclick="window.location.href='profil.php?id=<?= htmlspecialchars($user['id']) ?>'">Profil</button>
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -196,7 +181,7 @@ function getUserProfilePhotoById($id) {
                     <img src="<?= htmlspecialchars($conversation_with_photo) ?>" alt="Photo de profil" class="profile-picture">
                 </div>
                 <h2>Conversation avec <?= htmlspecialchars($conversation_with_name) ?></h2>
-                <button onclick="window.location.href='profil.php?id=<?= htmlspecialchars($conversation_with) ?>'">Profil</button>
+                <button class="btn-profile" onclick="window.location.href='profil.php?id=<?= htmlspecialchars($conversation_with) ?>'">Profil</button>
             </div>
             <div class="conversation-messages">
                 <?php foreach ($selected_conversation as $index => $conv_message): ?>
@@ -204,17 +189,16 @@ function getUserProfilePhotoById($id) {
                         <p><?= nl2br(htmlspecialchars($conv_message['message'])) ?></p>
                         <span class="timestamp"><?= htmlspecialchars($conv_message['timestamp']) ?></span>
                         <?php if ($conv_message['from'] !== $user_id_session): ?>
-                            <!-- Formulaire de signalement -->
                             <form method="post" class="report-form">
                                 <input type="hidden" name="index" value="<?= $index ?>">
                                 <input type="text" name="reason" placeholder="Motif du signalement">
-                                <button type="submit" name="report">Signaler</button>
+                                <button type="submit" name="report" class="btn-report">Signaler</button>
                             </form>
                         <?php endif; ?>
                         <?php if ($conv_message['from'] === $user_id_session): ?>
                             <form method="post" class="delete-form">
                                 <input type="hidden" name="index" value="<?= $index ?>">
-                                <button type="submit" name="delete">Supprimer</button>
+                                <button type="submit" name="delete" class="btn-delete">Supprimer</button>
                             </form>
                         <?php endif; ?>
                     </div>
@@ -225,7 +209,7 @@ function getUserProfilePhotoById($id) {
                     <input type="hidden" name="from" value="<?= htmlspecialchars($user_id_session) ?>">
                     <input type="hidden" name="to" value="<?= htmlspecialchars($conversation_with) ?>">
                     <textarea name="message" placeholder="Écrire un message..."></textarea>
-                    <button type="submit" name="send">Envoyer</button>
+                    <button type="submit" name="send" class="btn-send">Envoyer</button>
                 </form>
             </div>
         <?php else: ?>

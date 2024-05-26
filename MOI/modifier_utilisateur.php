@@ -1,6 +1,6 @@
 <?php
 
-function getUserById($id) {
+function getUserByEmail($email) {
     // Ouvrir le fichier utilisateurs.txt en mode lecture
     $file = fopen("utilisateurs.txt", "r");
 
@@ -16,10 +16,10 @@ function getUserById($id) {
     // Fermer le fichier
     fclose($file);
 
-    // Parcourir le tableau des utilisateurs pour trouver l'utilisateur avec l'ID donné
+    // Parcourir le tableau des utilisateurs pour trouver l'utilisateur avec l'adresse email donnée
     foreach ($users as $user) {
         $data = explode(",", $user);
-        if (trim($data[0]) === $id) {
+        if (trim($data[3]) === $email) {
             // Retourner l'utilisateur sous forme de tableau associatif
             return [
                 'id' => $data[0],
@@ -41,11 +41,11 @@ function getUserById($id) {
         }
     }
 
-    // Si aucun utilisateur avec l'ID donné n'est trouvé, retourner null
+    // Si aucun utilisateur avec l'adresse email donnée n'est trouvé, retourner null
     return null;
 }
 
-if (isset($_POST['modifier']) && isset($_POST['id'])) {
+if (isset($_POST['modifier']) && isset($_POST['email'])) {
     session_start();
 
     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
@@ -85,12 +85,12 @@ if (isset($_POST['modifier']) && isset($_POST['id'])) {
         exit;
     } else {
         // Afficher un message d'erreur si l'utilisateur n'est pas trouvé
-        echo "Aucun utilisateur avec cet ID n'a été trouvé.";
+        echo "Aucun utilisateur avec cet email n'a été trouvé.";
     }
 }
 
 // Récupérer l'utilisateur à modifier
-$user = getUserById($_GET['id']);
+$user = getUserByEmail($_POST['email']);
 
 ?>
 
@@ -100,56 +100,113 @@ $user = getUserById($_GET['id']);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier utilisateur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            margin-top : 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-<h1>Modifier utilisateur</h1>
-<form action="modifier_utilisateur.php" method="post">
-    <input type="hidden" name="id" value="<?php echo htmlspecialchars($user['id']); ?>">
-    <label for="first_name">User ID : <?php echo htmlspecialchars($user['id']); ?></label>
-    <br>
-    <label for="first_name">Prénom :</label>
-    <input type="text" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>">
-    <br>
-    <label for="name">Nom :</label>
-    <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>">
-    <br>
-    <label for="email">Email :</label>
-    <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
-    <br>
-    <label for="password">Mot de passe :</label>
-    <input type="password" name="password" value="<?php echo htmlspecialchars($user['password']); ?>">
-    <br>
-    <label for="gender">Genre :</label>
-    <input type="text" name="gender" value="<?php echo htmlspecialchars($user['gender']); ?>">
-    <br>
-    <label for="birthdate">Date de naissance :</label>
-    <input type="date" name="birthdate" value="<?php echo htmlspecialchars($user['birthdate']); ?>">
-    <br>
-    <label for="profession">Profession :</label>
-    <input type="text" name="profession" value="<?php echo htmlspecialchars($user['profession']); ?>">
-    <br>
-    <label for="residence">Résidence :</label>
-    <input type="text" name="residence" value="<?php echo htmlspecialchars($user['residence']); ?>">
-    <br>
-    <label for="relationship_status">Statut de la relation :</label>
-    <input type="text" name="relationship_status" value="<?php echo htmlspecialchars($user['relationship_status']); ?>">
-    <br>
-    <label for="physical_description">Description physique :</label>
-    <textarea name="physical_description"><?php echo htmlspecialchars($user['physical_description']); ?></textarea>
-    <br>
-    <label for="personal_info">Informations personnelles :</label>
-    <textarea name="personal_info"><?php echo htmlspecialchars($user['personal_info']); ?></textarea>
-    <br>
-    <label for="photo_address">Adresse de la photo :</label>
-    <input type="text" name="photo_address" value="<?php echo htmlspecialchars($user['photo_address']); ?>">
-    <br>
-    <label for="user_type">Type d'utilisateur :</label>
-    <select name="user_type" id="user_type">
-        <option value="utilisateur" <?php if ($user['user_type'] === 'utilisateur') echo 'selected'; ?>>utilisateur</option>
-        <option value="administrateur" <?php if ($user['user_type'] === 'administrateur') echo 'selected'; ?>>administrateur</option>
-    </select>
-    <br>
-    <input type="submit" name="modifier" value="Modifier">
-</form>
+<div class="container">
+    <h1>Modifier utilisateur</h1>
+    <form action="modifier_utilisateur.php" method="post">
+        <input type="hidden" name="id" value="<?php echo htmlspecialchars($user['id']); ?>">
+        <label for="first_name">User ID : <?php echo htmlspecialchars($user['id']); ?></label>
+        <br>
+        <input type="hidden" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+        <label for="first_name">Prénom :</label>
+        <input type="text" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>">
+        <br>
+        <label for="name">Nom :</label>
+        <input type="text" name="name" value="<?php echo htmlspecialchars($user['name']); ?>">
+        <br>
+        <label for="email">Email :</label>
+        <input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+        <br>
+        <label for="password">Mot de passe :</label>
+        <input type="password" name="password" value="<?php echo htmlspecialchars($user['password']); ?>">
+        <br>
+        <label for="gender">Genre :</label>
+        <input type="text" name="gender" value="<?php echo htmlspecialchars($user['gender']); ?>">
+        <br>
+        <label for="birthdate">Date de naissance :</label>
+        <input type="date" name="birthdate" value="<?php echo htmlspecialchars($user['birthdate']); ?>">
+        <br>
+        <label for="profession">Profession :</label>
+        <input type="text" name="profession" value="<?php echo htmlspecialchars($user['profession']); ?>">
+        <br>
+        <label for="residence">Résidence :</label>
+        <input type="text" name="residence" value="<?php echo htmlspecialchars($user['residence']); ?>">
+        <br>
+        <label for="relationship_status">Statut de la relation :</label>
+        <input type="text" name="relationship_status" value="<?php echo htmlspecialchars($user['relationship_status']); ?>">
+        <br>
+        <label for="physical_description">Description physique :</label>
+        <textarea name="physical_description"><?php echo htmlspecialchars($user['physical_description']); ?></textarea>
+        <br>
+        <label for="personal_info">Informations personnelles :</label>
+        <textarea name="personal_info"><?php echo htmlspecialchars($user['personal_info']); ?></textarea>
+        <br>
+        <label for="photo_address">Adresse de la photo :</label>
+        <input type="text" name="photo_address" value="<?php echo htmlspecialchars($user['photo_address']); ?>">
+        <br>
+        <label for="user_type">Type d'utilisateur :</label>
+        <select name="user_type" id="user_type">
+            <option value="utilisateur" <?php if ($user['user_type'] === 'utilisateur') echo 'selected'; ?>>utilisateur</option>
+            <option value="administrateur" <?php if ($user['user_type'] === 'administrateur') echo 'selected'; ?>>administrateur</option>
+        </select>
+        <br>
+        <input type="submit" name="modifier" value="Modifier">
+    </form>
+</div>
 </body>
 </html>

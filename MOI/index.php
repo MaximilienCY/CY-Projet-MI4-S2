@@ -54,7 +54,7 @@ $droits_utilisateur = $droits[$user_type];
                         echo '<li><a href="admin.php">Administration</a></li>';
                     }
 
-                    if ($user_type !== 'visiteur' && $user_type !== 'utilisateur' ){
+                    if ($user_type !== 'visiteur' ){
                         echo '<li><a href="recherche.php">Recherche</a></li> ';
                     }
                     

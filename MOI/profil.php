@@ -158,7 +158,7 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
                 }
 
                 if (isset($_SESSION['droits_utilisateur']) && in_array('envoyer_messages', $_SESSION['droits_utilisateur'])) {
-                    echo '<li><a href="message.php">Messages</a></li>';
+                    echo '<li><a href="messages.php">Messages</a></li>';
                 }
                 if (isset($_SESSION['droits_utilisateur']) && in_array('gerer_utilisateurs', $_SESSION['droits_utilisateur'])) {
                     echo '<li><a href="admin.php">Administration</a></li>';
@@ -210,7 +210,7 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
                         <?php endif; ?>
 
                         <?php if ($connectedUserType == 'abonne' || $connectedUserType == 'administrateur'): ?>
-                            <button onclick="window.location.href='message.php?conversation_with=<?php echo htmlspecialchars($profile['id']); ?>'">Envoyer un message</button>
+                            <button onclick="window.location.href='messages.php?conversation_with=<?php echo htmlspecialchars($profile['id']); ?>'">Envoyer un message</button>
                             <form method="post" style="display:inline;">
                                 <button type="submit" name="block">Bloquer</button>
                             </form>
@@ -220,7 +220,7 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
                             </form>
                         <?php endif; ?>
 
-                        <?php if ($connectedUserType == 'administrateur'): ?>
+                        <?php if ($connectedUserType == 'administrateur' || $connectedUserId == $profile['id']): ?>
                             <button onclick="window.location.href='modifier_utilisateur.php?id=<?php echo htmlspecialchars($profile['id']); ?>'">Modifier le profil</button>
                         <?php endif; ?>
                     </div>

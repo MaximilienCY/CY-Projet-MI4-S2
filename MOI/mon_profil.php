@@ -37,7 +37,7 @@ $droits_utilisateur = $droits[$user_type];
                 <li><a href="recherche.php">Recherche</a></li>
             <?php
             if (in_array('envoyer_messages', $droits_utilisateur)) {
-                    echo '<A href=\'messages.php\'">Messages</a></li>';
+                    echo '<A href=\'message.php\'">Messages</a></li>';
                 }
             ?>
             <?php

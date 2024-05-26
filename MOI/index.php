@@ -26,7 +26,7 @@ $droits_utilisateur = $droits[$user_type];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infinity'love - RencontreSite</title>
-    <link rel="stylesheet" href="accueil.css">
+    <link rel="stylesheet" href="../styles/accueil.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
 </head>
@@ -105,7 +105,7 @@ $droits_utilisateur = $droits[$user_type];
                                 require_once 'fonctions.php';
 
                                 // Utiliser la fonction pour obtenir les 10 profils les plus récents
-                                $filePath = "utilisateurs.txt";
+                                $filePath = "../txt/utilisateurs.txt";
                                 $recentProfiles = getRecentProfiles($filePath);
 
                                 if (count($recentProfiles) > 0) {

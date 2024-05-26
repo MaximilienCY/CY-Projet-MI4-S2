@@ -1,6 +1,6 @@
 <?php
 
-function getUserByEmail($email) {
+function getUserById($id) {
     // Ouvrir le fichier utilisateurs.txt en mode lecture
     $file = fopen("utilisateurs.txt", "r");
 
@@ -16,10 +16,10 @@ function getUserByEmail($email) {
     // Fermer le fichier
     fclose($file);
 
-    // Parcourir le tableau des utilisateurs pour trouver l'utilisateur avec l'adresse email donnée
+    // Parcourir le tableau des utilisateurs pour trouver l'utilisateur avec l'ID donné
     foreach ($users as $user) {
         $data = explode(",", $user);
-        if (trim($data[3]) === $email) {
+        if (trim($data[0]) === $id) {
             // Retourner l'utilisateur sous forme de tableau associatif
             return [
                 'id' => $data[0],
@@ -41,11 +41,11 @@ function getUserByEmail($email) {
         }
     }
 
-    // Si aucun utilisateur avec l'adresse email donnée n'est trouvé, retourner null
+    // Si aucun utilisateur avec l'ID donné n'est trouvé, retourner null
     return null;
 }
 
-if (isset($_POST['modifier']) && isset($_POST['email'])) {
+if (isset($_POST['modifier']) && isset($_POST['id'])) {
     session_start();
 
     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
@@ -85,12 +85,12 @@ if (isset($_POST['modifier']) && isset($_POST['email'])) {
         exit;
     } else {
         // Afficher un message d'erreur si l'utilisateur n'est pas trouvé
-        echo "Aucun utilisateur avec cet email n'a été trouvé.";
+        echo "Aucun utilisateur avec cet ID n'a été trouvé.";
     }
 }
 
 // Récupérer l'utilisateur à modifier
-$user = getUserByEmail($_POST['email']);
+$user = getUserById($_GET['id']);
 
 ?>
 
@@ -107,7 +107,6 @@ $user = getUserByEmail($_POST['email']);
     <input type="hidden" name="id" value="<?php echo htmlspecialchars($user['id']); ?>">
     <label for="first_name">User ID : <?php echo htmlspecialchars($user['id']); ?></label>
     <br>
-    <input type="hidden" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
     <label for="first_name">Prénom :</label>
     <input type="text" name="first_name" value="<?php echo htmlspecialchars($user['first_name']); ?>">
     <br>

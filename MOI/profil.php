@@ -95,6 +95,16 @@ function unblockUser($userId, $blockedUserId) {
     file_put_contents($filePath, implode("\n", $newLines) . "\n");
 }
 
+// Fonction pour signaler un utilisateur
+function reportUser($reporterId, $reportedId, $reason) {
+    $filePath = 'signalement.txt';
+    $file = fopen($filePath, "a");
+    if ($file) {
+        fwrite($file, "$reporterId,$reportedId,$reason\n");
+        fclose($file);
+    }
+}
+
 // Vérifier le type d'utilisateur connecté
 $connectedUserType = isset($_SESSION['user_type']) ? $_SESSION['user_type'] : 'visiteur';
 $connectedUserId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
@@ -105,12 +115,15 @@ if ($connectedUserType == 'visiteur') {
     exit;
 }
 
-// Gérer le blocage et le déblocage des utilisateurs
+// Gérer le blocage, le déblocage et le signalement des utilisateurs
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['block'])) {
         blockUser($connectedUserId, $profileId);
     } elseif (isset($_POST['unblock'])) {
         unblockUser($connectedUserId, $profileId);
+    } elseif (isset($_POST['report'])) {
+        $reason = isset($_POST['reason']) ? htmlspecialchars($_POST['reason']) : '';
+        reportUser($connectedUserId, $profileId, $reason);
     }
 }
 
@@ -133,7 +146,6 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
             <a href="#" class="logo">Infinity Love<span>.<span></a>
             <ul class="menu-links">
                 <li><a href="index.php">Accueil</a></li>
-                <li><a href="#features">Offres</a></li>
                 <li><a href="recherche.php">Recherche</a></li>
                 <?php
                 // Vérifiez si l'utilisateur est connecté
@@ -202,9 +214,13 @@ $isBlocked = isUserBlocked($connectedUserId, $profileId);
                             <form method="post" style="display:inline;">
                                 <button type="submit" name="block">Bloquer</button>
                             </form>
+                            <form method="post" style="display:inline;">
+                                <input type="text" name="reason" placeholder="Motif du signalement" required>
+                                <button type="submit" name="report">Signaler</button>
+                            </form>
                         <?php endif; ?>
 
-                        <?php if ($connectedUserId == $profile['id'] || $connectedUserType == 'administrateur'): ?>
+                        <?php if ($connectedUserType == 'administrateur'): ?>
                             <button onclick="window.location.href='modifier_utilisateur.php?id=<?php echo htmlspecialchars($profile['id']); ?>'">Modifier le profil</button>
                         <?php endif; ?>
                     </div>

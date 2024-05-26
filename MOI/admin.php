@@ -1,7 +1,7 @@
 <?php
 
 function banUser($email){
-    $users = file("utilisateurs.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $users = file("../txt/utilisateurs.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     foreach ($users as $key => $user) {
         $data = explode(",", $user);
@@ -13,11 +13,11 @@ function banUser($email){
         }
     }
 
-    file_put_contents("utilisateurs.txt", implode("\n", $users));
+    file_put_contents("../txt/utilisateurs.txt", implode("\n", $users));
 }
 
 function unbanUser($email){
-    $users = file("utilisateurs.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $users = file("../txt/utilisateurs.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
     foreach ($users as $key => $user) {
         $data = explode(",", $user);
@@ -29,12 +29,12 @@ function unbanUser($email){
         }
     }
 
-    file_put_contents("utilisateurs.txt", implode("\n", $users));
+    file_put_contents("../txt/utilisateurs.txt", implode("\n", $users));
 }
 
 function getBannedUsers(){
     // Ouvrir le fichier utilisateurs.txt en mode lecture
-    $file = fopen("utilisateurs.txt", "r");
+    $file = fopen("../txt/utilisateurs.txt", "r");
 
     // Lire le contenu du fichier et le stocker dans un tableau
     $users = [];
@@ -62,7 +62,7 @@ function getBannedUsers(){
 
 function getUsers(){
     // Ouvrir le fichier utilisateurs.txt en mode lecture
-    $file = fopen("utilisateurs.txt", "r");
+    $file = fopen("../txt/utilisateurs.txt", "r");
 
     // Lire le contenu du fichier et le stocker dans un tableau
     $users = [];
@@ -119,9 +119,8 @@ function getReports($users) {
 <html lang="fr">
 <head>
     <title>Liste des utilisateurs</title>
-    <link rel="stylesheet" href="admin.css">
     <title>Infinity'love - RencontreSite</title>
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="../styles/admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         .scrollable-table {

@@ -76,14 +76,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   	        <a href="#" class="logo">Infinity Love<span>.<span></a>
                 <ul class="menu-links">
                     <li><a href="index.php">Accueil</a></li> 
-                    <li><a href="#features">Offres</a></li>
-                    <li><a href="recherche.php">Recherche</a></li> <!-- Lien transformé en bouton -->
+                    <li><a href="index.php">Offres</a></li>
                     <?php
+                    
                     // Vérifiez si l'utilisateur est connecté
                     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
                         echo '<li><a href="index.php?action=logout">Déconnexion</a></li>';
                         echo '<li><a href="mon_profil.php">Mon profil</a></li>';
-                    } else {
+                    } 
+                    else {
                         echo '<li><button onclick="window.location.href=\'inscription.php\'">Inscription</button></li>';
                         echo '<li><button onclick="window.location.href=\'connexion.php\'">Connexion</button></li>';
                     }
@@ -171,4 +172,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </footer>
 </body>
 </html>
-

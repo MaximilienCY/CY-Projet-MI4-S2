@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['upgrade_to_abonne'])) 
         $updated = false;
 
         // Lecture du fichier utilisateurs.txt
-        $file = fopen("utilisateurs.txt", "r");
+        $file = fopen("../txt/utilisateurs.txt", "r");
         $users = [];
 
         // Boucle pour lire et mettre à jour le type d'utilisateur
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['upgrade_to_abonne'])) 
 
         // Écriture des modifications dans le fichier utilisateurs.txt
         if ($updated) {
-            $file = fopen("utilisateurs.txt", "w");
+            $file = fopen("../txt/utilisateurs.txt", "w");
             foreach ($users as $user) {
                 fwrite($file, $user);
             }
@@ -66,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['upgrade_to_abonne'])) 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="abonnement.css">
+    <link rel="stylesheet" href="../styles/abonnement.css">
     <title>Devenir Abonné</title>
 </head>
 <body>

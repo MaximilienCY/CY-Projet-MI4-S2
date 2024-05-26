@@ -1,3 +1,25 @@
+<?php
+session_start();
+
+// Initialiser la session de base pour les visiteurs
+if (!isset($_SESSION['user_type'])) {
+    $_SESSION['user_type'] = 'visiteur';
+}
+
+$user_type = $_SESSION['user_type'];
+
+// Définir les droits pour chaque type d'utilisateur
+$droits = [
+    'visiteur' => ['voir_profil_public'],
+    'utilisateur' => ['voir_profil_public', 'voir_profil_prive'],
+    'abonne' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages'],
+    'administrateur' => ['voir_profil_public', 'voir_profil_prive', 'envoyer_messages', 'gerer_utilisateurs']
+];
+
+$droits_utilisateur = $droits[$user_type];
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -14,8 +36,21 @@
             <a href="index.php" class="logo">Infinity Love<span>.<span></a>
             <ul class="menu-links">
                 <li><a href="index.php#hero-section">Accueil</a></li> 
-                <li><a href="index.php#features">Offres</a></li>
-                <li><a href="recherche.php">Recherche</a></li>
+                <?php
+                if ($_SESSION['user_type'] === 'utilisateur') {
+                echo '<li><a href=\'index.php#features\'">Offres</a></li>';
+                }
+                ?>
+                <?php
+                if ($_SESSION['user_type'] !== 'visiteur') {
+                    echo '<li><a href=\'mon_profil.php\'">Mon profil</a></li>';
+                }
+            ?>
+            <?php
+            if ($_SESSION['user_type'] !== 'utilisateur') {
+                    echo '<li><a href=\'messages.php\'">Messages</a></li>';
+                }
+                ?>
             </ul>
             <div class="auth-buttons">
                 <?php
@@ -23,16 +58,12 @@
                 session_start();
                 if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
                     echo '<button onclick="window.location.href=\'index.php?action=logout\'">Déconnexion</button>';
-                    echo '<button onclick="window.location.href=\'mon_profil.php\'">Mon profil</button>';
                 } else {
                     echo '<button onclick="window.location.href=\'inscription.php\'">Inscription</button>';
                     echo '<button onclick="window.location.href=\'connexion.php\'">Connexion</button>';
                 }
 
                 $droits_utilisateur = []; // Définir les droits utilisateur ici
-                if (in_array('envoyer_messages', $droits_utilisateur)) {
-                    echo '<button onclick="window.location.href=\'messages.php\'">Messages</button>';
-                }
                 if (in_array('gerer_utilisateurs', $droits_utilisateur)) {
                     echo '<button onclick="window.location.href=\'admin.php\'">Administration</button>';
                 }

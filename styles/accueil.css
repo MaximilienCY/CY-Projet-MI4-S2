@@ -71,7 +71,7 @@ background: #fff;
 
 .hero-section {
   height: 100vh;
-  background-image: url("uploads/steelwool-458842_1920.jpg");
+  background-image: url("../MOI/uploads/steelwool-458842_1920.jpg");
   background-position: center;
   background-size: cover;
   display: flex;
@@ -583,7 +583,7 @@ h3 {
 
 
 section.users{
-    background-image: url(uploads/output.jpg)
+    background-image: url(../MOI/uploads/output.jpg)
 }
 
 .users p{

@@ -6,7 +6,7 @@ function getUsers() {
     if (($handle = fopen($filePath, "r")) !== false) {
         while (($line = fgets($handle)) !== false) {
             $data = explode(",", trim($line));
-            $users[] = ['id' => $data[0], 'pseudo' => $data[1]];
+            $users[] = ['id' => $data[0], 'pseudo' => $data[1],'photo' => $data[12]];
         }
         fclose($handle);
     }
@@ -130,5 +130,4 @@ function reportMessage($index, $reason) {
     }
 }
 ?>
-
 

@@ -2,7 +2,7 @@
 
 function getUserById($id) {
     // Ouvrir le fichier utilisateurs.txt en mode lecture
-    $file = fopen("utilisateurs.txt", "r");
+    $file = fopen("../txt/utilisateurs.txt", "r");
 
     // Lire le contenu du fichier et le stocker dans un tableau
     $users = [];
@@ -50,7 +50,7 @@ if (isset($_POST['modifier']) && isset($_POST['id'])) {
 
     if (isset($_SESSION['user_type']) && $_SESSION['user_type'] !== 'visiteur') {
         // Lire toutes les lignes du fichier dans un tableau
-        $lines = file("utilisateurs.txt");
+        $lines = file("../txt/utilisateurs.txt");
 
         // Parcourir les lignes pour trouver et mettre à jour l'utilisateur actuel
         foreach ($lines as &$line) {
@@ -78,7 +78,7 @@ if (isset($_POST['modifier']) && isset($_POST['id'])) {
         }
 
         // Réécrire toutes les lignes dans le fichier
-        file_put_contents("utilisateurs.txt", implode("", $lines));
+        file_put_contents("../txt/utilisateurs.txt", implode("", $lines));
 
         // Rediriger l'utilisateur vers la page d'administration
         header("Location: admin.php");
